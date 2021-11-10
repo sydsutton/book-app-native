@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, ImageBackground, FlatList, Image } from "react-native"
+import { View, Text, StyleSheet, ImageBackground, FlatList, Image} from "react-native"
+import { Card, Title, Paragraph } from "react-native-paper"
 import BOOKS from "../booksData/BOOKS"
 
 class HomeComponent extends Component {
@@ -11,28 +12,34 @@ class HomeComponent extends Component {
     }
 
     render(){
-        const Item = ({title}) => {
-            return (
-                <View>
-                    <Text>{title}</Text>
-                </View>
-            )
-        } 
+        // const Item = ({title}) => {
+        //     return (
+        //         <View>
+        //             <Text>{title}</Text>
+        //         </View>
+        //     )
+        // } 
 
-        const renderBooks = ({item}) => {
+        const RenderBooks = ({item}) => {
             return (
-                <View>
-                    <Item title={item.title}/>
-                </View>
+                <Card style={{marginBottom: 20, marginRight: 15, height: 400, width: 190}}>
+                    <Card.Content>
+                        <Title>{item.title}</Title>
+                        <Paragraph>{item.author}</Paragraph>
+                    </Card.Content>
+                    <Card.Cover 
+                        source={item.imageLink} style={styles.image}/>
+                </Card>
             )
         }
         return (
-            <ImageBackground source={{uri: "https://images.unsplash.com/photo-1604339454409-701c5278c546?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1827&q=80"}} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={require("../images/backgroundImage.jpg")} style={{resizeMode: "cover"}}>
                 <View styles={styles.container}>
                     <FlatList
                         data={this.state.books}
-                        renderItem={renderBooks}
-                        keyExtractor={item => item.id}
+                        renderItem={RenderBooks}
+                        keyExtractor={item => item.title.toString()}
+                        numColumns={2}
                     >
                     </FlatList>
                 </View>
@@ -42,14 +49,14 @@ class HomeComponent extends Component {
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row"
     },
     image: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: "center",
-        width: null,
-        height: null
+        resizeMode: "cover"
     }
 })
 

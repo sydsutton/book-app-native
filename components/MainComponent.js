@@ -3,6 +3,7 @@ import Home from "./HomeComponent"
 import Search from "./SearchComponent"
 import Saved from "./SavedComponent"
 import Profile from "./ProfileComponent"
+import Welcome from "./WelcomeComponent"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
@@ -13,13 +14,17 @@ function MyTabs(){
     return (
         <Tab.Navigator>
             <Tab.Screen 
+                name="Welcome"
+                component={Welcome}
+            />
+            <Tab.Screen 
                 name="Home"
                 component={Home}
             />
-            <Tab.Screen 
+            {/* <Tab.Screen 
                 name="Search" 
                 component={Search}
-            />
+            /> */}
             <Tab.Screen 
                 name="Saved" 
                 component={Saved}
