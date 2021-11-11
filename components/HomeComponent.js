@@ -2,20 +2,18 @@ import React, {Component} from 'react';
 import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
 import { Card, Button, Icon, Text, Overlay} from "react-native-elements"
 import { connect } from "react-redux"
-import BOOKS from "../booksData/BOOKS"
 
-// const mapStateToProps = (state) => {
-//     return {
-//         books: state.books
-//     }
-// }
+const mapStateToProps = (state) => {
+    return {
+        books: state.books
+    }
+}
 
 class HomeComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
             isOpen: false,
-            books: BOOKS
         }
     }
 
@@ -26,7 +24,19 @@ class HomeComponent extends Component {
     }
 
     render(){
-        // const {books} = this.props
+
+        const {books} = this.props
+
+        const RenderShelf = ({item}) => {
+            return (
+                <View>
+                    <Card style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                        <Image style={{width: 100, height: 400}} source={item.imageLink} />
+                        <Text style={{transform: [{ rotate: '90deg' }], color: "white"}}>{item.title}</Text>
+                    </Card>
+                </View>
+            )
+        }
         const RenderBooks = ({item}) => {
             return (
                 <View>
@@ -68,20 +78,18 @@ class HomeComponent extends Component {
                     <ScrollView>
                         <FlatList
                             horizontal
-                            // data={books}
-                            data={this.state.books}
+                            data={books}
                             renderItem={RenderBooks}
-                            keyExtractor={item => item.title.toString()}
+                            keyExtractor={(item, index) => 'key'+index}
                         >
                         </FlatList>
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
-                        <Text>More information down here somewhere</Text> 
+                        <FlatList
+                            horizontal
+                            data={books}
+                            renderItem={RenderShelf}
+                            keyExtractor={(item, index) => 'key'+index}
+                        >
+                        </FlatList>
                     </ScrollView>
                 </View>
             </ImageBackground>
@@ -95,17 +103,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     card: {
-        height: 400
+        height: 300
     },
     text: {
         fontSize: 20,
         paddingTop: 10
     },
     image: {
-        height: 400,
+        height: 300,
+        width: 200,
         resizeMode: "cover"
     }
 })
 
-// export default connect(mapStateToProps)(HomeComponent)
-export default HomeComponent
+export default connect(mapStateToProps)(HomeComponent)
