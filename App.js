@@ -4,7 +4,9 @@ import { Provider } from "react-redux"
 import { createStore } from "redux"
 import bookReducer from "./redux/bookReducer"
 
-const store = createStore(bookReducer)
+const store = createStore({
+  books: bookReducer
+})
 
 export default function App() {
   return (

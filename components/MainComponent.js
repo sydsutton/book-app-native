@@ -7,7 +7,6 @@ import Welcome from "./WelcomeComponent"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-
 const Tab = createBottomTabNavigator()
 
 function MyTabs(){
@@ -45,4 +44,4 @@ function MainComponent() {
     );
   }
   
-export default MainComponent;
+export default MainComponent
