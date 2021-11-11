@@ -2,18 +2,20 @@ import React, {Component} from 'react';
 import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
 import { Card, Button, Icon, Text, Overlay} from "react-native-elements"
 import { connect } from "react-redux"
+import BOOKS from "../booksData/BOOKS"
 
-const mapStateToProps = (state) => {
-    return {
-        books: state.books
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         books: state.books
+//     }
+// }
 
 class HomeComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            isOpen: false
+            isOpen: false,
+            books: BOOKS
         }
     }
 
@@ -24,7 +26,7 @@ class HomeComponent extends Component {
     }
 
     render(){
-        const {books} = this.props
+        // const {books} = this.props
         const RenderBooks = ({item}) => {
             return (
                 <View>
@@ -66,7 +68,8 @@ class HomeComponent extends Component {
                     <ScrollView>
                         <FlatList
                             horizontal
-                            data={books}
+                            // data={books}
+                            data={this.state.books}
                             renderItem={RenderBooks}
                             keyExtractor={item => item.title.toString()}
                         >
@@ -104,4 +107,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(mapStateToProps)(HomeComponent)
+// export default connect(mapStateToProps)(HomeComponent)
+export default HomeComponent
