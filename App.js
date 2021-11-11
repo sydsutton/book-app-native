@@ -1,22 +1,15 @@
 import React from "react"
 import Main from "./components/MainComponent"
-import { Provider as PaperProvider, DefaultTheme } from "react-native-paper"
+import { Provider } from "react-redux"
+import { createStore } from "redux"
+import bookReducer from "./redux/bookReducer"
 
-const theme = {
-  ...DefaultTheme,
-  roundness: 2,
-  dark: false,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#379EDB',
-    accent: '#ffd059',
-  },
-};
+const store = createStore(bookReducer)
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
+    <Provider store={store}>
       <Main />
-    </PaperProvider>
+    </Provider>
   );
 }
