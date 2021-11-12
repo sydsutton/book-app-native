@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
-import { Card, Button, Icon, Text, Overlay} from "react-native-elements"
+import { Card, Button, Icon, Text, Overlay, SearchBar } from "react-native-elements"
 import { connect } from "react-redux"
 
 const mapStateToProps = (state) => {
     return {
-        books: state.books
+        books: state.books,
     }
 }
 
@@ -14,6 +14,7 @@ class HomeComponent extends Component {
         super(props)
         this.state = {
             isOpen: false,
+            search: ""
         }
     }
 
@@ -22,25 +23,21 @@ class HomeComponent extends Component {
             isOpen: !this.state.isOpen
         })
     }
+    updateSearch = (search) => {
+        this.setState({
+            search
+        })
+    }
 
     render(){
 
         const {books} = this.props
+        const {search} = this.state
 
-        const RenderShelf = ({item}) => {
-            return (
-                <View>
-                    <Card style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-                        <Image style={{width: 100, height: 400}} source={item.imageLink} />
-                        <Text style={{transform: [{ rotate: '90deg' }], color: "white"}}>{item.title}</Text>
-                    </Card>
-                </View>
-            )
-        }
         const RenderBooks = ({item}) => {
             return (
                 <View>
-                    <Card style={styles.card}>
+                    <Card containerStyle={{backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 2, borderColor: "white"}}>
                         <Image 
                             source={item.imageLink}
                             style={styles.image}
@@ -73,20 +70,24 @@ class HomeComponent extends Component {
             )
         }
         return (
-            <ImageBackground source={require("../images/backgroundImage.jpg")} style={{resizeMode: "cover"}}>
+            <ImageBackground source={require("../images/backgroundImage.jpg")} style={{resizeMode: "cover", flex: 1}}>
                 <View>
                     <ScrollView>
+                        <SearchBar
+                            placeholder="Search for a book"
+                            lightTheme
+                            containerStyle={{backgroundColor: "transparent"}}
+                            inputContainerStyle={{backgroundColor: "#fff", borderRadius: 30}}
+                            onChangeText={this.updateSearch}
+                            value={search}
+                        />
+                        <View style={{height: 400}}>
+                        </View>
+                        <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text>
                         <FlatList
                             horizontal
                             data={books}
                             renderItem={RenderBooks}
-                            keyExtractor={(item, index) => 'key'+index}
-                        >
-                        </FlatList>
-                        <FlatList
-                            horizontal
-                            data={books}
-                            renderItem={RenderShelf}
                             keyExtractor={(item, index) => 'key'+index}
                         >
                         </FlatList>
@@ -102,12 +103,12 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    card: {
-        height: 300
-    },
     text: {
         fontSize: 20,
-        paddingTop: 10
+        paddingTop: 10, 
+        flex: 1,
+        flexWrap: "wrap",
+        width: 200
     },
     image: {
         height: 300,

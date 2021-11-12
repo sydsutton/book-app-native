@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Home from "./HomeComponent"
 import Search from "./SearchComponent"
 import Saved from "./SavedComponent"
 import Profile from "./ProfileComponent"
 import Welcome from "./WelcomeComponent"
-import {Icon} from "react-native-elements"
+import {Icon, Header} from "react-native-elements"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
+
 const Tab = createBottomTabNavigator()
 
-function MyTabs(){
+function MyTabs() {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -29,16 +30,22 @@ function MyTabs(){
     
                 return <Icon name={iconName} size={size} color={color} type="font-awesome-5"/>;
                 },
-                tabBarActiveTintColor: 'blue',
+                tabBarActiveTintColor: '#308CC1',
                 tabBarInactiveTintColor: 'gray',
             })}>
             <Tab.Screen 
                 name="Welcome"
                 component={Welcome}
+                options={{  
+                    headerShown: false,  
+                  }}   
             />
             <Tab.Screen 
                 name="Home"
                 component={Home}
+                options={{  
+                    headerShown: false,  
+                  }}   
             />
             {/* <Tab.Screen 
                 name="Search" 
@@ -47,21 +54,36 @@ function MyTabs(){
             <Tab.Screen 
                 name="Saved" 
                 component={Saved}
+                options={{  
+                    headerShown: false,  
+                  }}   
             />
             <Tab.Screen 
                 name="Profile" 
                 component={Profile}
+                options={{  
+                    headerShown: false,  
+                  }}   
             />
         </Tab.Navigator>
     )
+
 }
 
-function MainComponent() {
-    return (
-        <NavigationContainer>
-            <MyTabs />
-        </NavigationContainer>
-    );
+class MainComponent extends Component {
+    render() {
+        return (
+            <NavigationContainer>
+                <Header 
+                    backgroundColor="#4CAAD1"
+                    leftComponent={{ icon: 'menu', color: '#fff', iconStyle: { color: '#fff' } }}
+                    centerComponent={{ text: 'YourShelf', style: { color: '#fff', fontWeight: "bold"} }}
+                    rightComponent={{ icon: 'login', color: '#fff' }}
+                />
+                <MyTabs/>
+            </NavigationContainer>
+        );
+    }
   }
   
 export default MainComponent

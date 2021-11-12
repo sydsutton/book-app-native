@@ -14,8 +14,7 @@ class SavedComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            savedBooks: BOOKS
-        }
+    }
     }
     render(){
         const {books} = this.props
@@ -23,7 +22,7 @@ class SavedComponent extends Component {
         const renderSaved = ({item}) => {
             return(
                 <View>
-                    <Card style={{flex: 1, flexDirection: "row", justifyContent: "space-around"}}>
+                    <Card containerStyle={{backgroundColor: "rgba(255,255,255,0.5)", borderWidth: 2, borderColor: "white"}}>
                         <View style={{flex: 1, flexDirection: "row"}}>
                             <Avatar 
                                 source={item.imageLink}
@@ -31,13 +30,23 @@ class SavedComponent extends Component {
                                 icon={{name: 'user', type: 'font-awesome'}}
                             />
                             <View style={{flexDirection: "column", marginLeft: 20}}>
-                                <Text style={{fontSize: 20}}>{item.title}</Text>
+                                <Text style={{fontSize: 20, flex: 1, flexWrap: "wrap", width: 200}}>{item.title}</Text>
                                 <Text>By {item.author}</Text>
                             </View>
                         </View>
                         <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
-                            <Button buttonStyle={{backgroundColor: "orange", marginTop: 20, borderRadius: 20}}title="Remove book"/>
-                            <Button buttonStyle={{backgroundColor: "green", marginTop: 20, borderRadius: 20}}title="Move to bookshelf"/>
+                            <Button 
+                                buttonStyle={{marginTop: 20, backgroundColor:"#CB2A2A", borderRadius: 20, paddingLeft: 15, paddingRight: 15}}
+                                title="   Remove book"
+                                titleStyle={{fontSize: 12}}
+                                icon={<Icon name="minus" color="#fff" size={12} type="font-awesome"/>}
+                            />
+                            <Button 
+                                buttonStyle={{backgroundColor: "#2E7A2D", marginTop: 20, borderRadius: 20, paddingLeft: 15, paddingRight: 15}}
+                                icon={<Icon name="arrow-right" color="#fff" size={12} type="font-awesome"/>}
+                                title="   I've read it"
+                                titleStyle={{fontSize: 12}}
+                            />
                         </View>
                     </Card>
                 </View>
