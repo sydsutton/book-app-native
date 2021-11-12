@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
-import { Card, Button, Icon, Text, Overlay, SearchBar } from "react-native-elements"
+import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView, Picker } from "react-native"
+import { Card, Button, Icon, Text, Overlay, SearchBar, ThemeConsumer } from "react-native-elements"
+import GENRES from "../booksData/GENRES"
+import RenderSelectedValue from "./RenderSelectedValues"
 import { connect } from "react-redux"
 
 const mapStateToProps = (state) => {
@@ -14,7 +16,10 @@ class HomeComponent extends Component {
         super(props)
         this.state = {
             isOpen: false,
-            search: ""
+            search: "",
+            selectedValue: "",
+            genres: GENRES, 
+            searchedBooks: ""
         }
     }
 
@@ -27,6 +32,13 @@ class HomeComponent extends Component {
         this.setState({
             search
         })
+    }
+
+    handleValueChange = ({itemValue}) => {
+        this.setState({
+            selectedValue: itemValue
+        })
+        console.log(this.state.selectedValue)
     }
 
     render(){
@@ -74,14 +86,34 @@ class HomeComponent extends Component {
                 <View>
                     <ScrollView>
                         <SearchBar
-                            placeholder="Search for a book"
+                            placeholder="Search by title"
                             lightTheme
                             containerStyle={{backgroundColor: "transparent"}}
                             inputContainerStyle={{backgroundColor: "#fff", borderRadius: 30}}
                             onChangeText={this.updateSearch}
                             value={search}
                         />
-                        <View style={{height: 400}}>
+                        <Text style={{textAlign: "center", fontSize: 25, color: "grey", marginTop: 10}}>OR</Text>
+                        <View style={{justifyContent: "center", alignItems: "center", marginTop: 10}}>
+                            <Text>Search by subject</Text>
+                            <View style={{backgroundColor: "white", borderRadius: 20, height: 40, width: 220, marginTop: 10, justifyContent: "center"}}>
+                                <Picker
+                                    selectedValue={this.state.selectedValue}
+                                    style={{ height: 50, width: 200, color: "grey", marginLeft: "auto"}}
+                                    mode="dialog"
+                                    onValueChange={(itemValue) => this.setState({selectedValue: itemValue})}
+                                >
+                                    <Picker.Item label="Search by subject" value="" />
+                                    {this.state.genres ? this.state.genres.map(genre => {
+                                        return (
+                                            <Picker.Item key={genre.index} label={genre.name} value={genre.value} />
+                                        )
+                                    }) : null}
+                                </Picker>
+                            </View>
+                        </View>
+                        <View style={{height: 200}}>
+                            {this.state.selectedValue ? <RenderSelectedValue value={this.state.selectedValue}/> : null}
                         </View>
                         <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text>
                         <FlatList

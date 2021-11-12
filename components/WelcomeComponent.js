@@ -44,10 +44,14 @@ class WelcomeComponent extends Component {
                             />
                             <Input 
                                 placeholder="   password"
-                                leftIcon={<Icon name="unlock-alt" type="font-awesome" color="grey"/>}
+                                leftIcon={<Icon name="lock" type="font-awesome" color="grey"/>}
                                 secureTextEntry={true}
                             />
-                            <Button title="login" onPress={this.toggleLogin}/>
+                            <Button 
+                                title="login" 
+                                onPress={this.toggleLogin}
+                                type="submit"
+                                />
                         </Card>
                     </Overlay>
                 </View>
@@ -60,7 +64,7 @@ const style = StyleSheet.create({
     container:{
         flex: 1,
         flexDirection: "column",
-        paddingTop: ( Platform.OS === 'ios' ) ? 20 : 0,
+        // paddingTop: ( Platform.OS === 'ios' ) ? 20 : 0,
         alignItems: "center",
         justifyContent: "center"
     },
