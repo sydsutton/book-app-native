@@ -22,7 +22,8 @@ class HomeComponent extends Component {
             genres: GENRES, 
             searchedBooks: "", 
             isLoading: false,
-            bookDescription: ""
+            bookDescription: "",
+            bookTitle: ""
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -37,13 +38,20 @@ class HomeComponent extends Component {
         const res = await fetch(`https://openlibrary.org${props}.json`)
         if(res.status === 200){
             const data = await res.json()
-            if(data.description.value){
+            console.log(data.title)
+            if(data.description) {
                 this.setState({
-                    bookDescription: data.description.value
+                    bookDescription: data.description,
+                    bookTitle: data.title
+                })
+            } else if(data.description.value){
+                this.setState({
+                    bookDescription: data.description.value,
+                    bookTitle: data.title
                 })
             } else {
                 this.setState({
-                    bookDescription: data.description
+                    bookDescription: "Sorry, but there is no description for this book"
                 })
             }
         } else {
@@ -188,8 +196,13 @@ class HomeComponent extends Component {
                                                 onBackdropPress={this.toggleModal}
                                                 overlayStyle={{width: 400, alignSelf: "center", paddingRight: 10, paddingLeft: 10}}
                                             >
-                                                <Text h4 style={{alignSelf: "center"}}>Description</Text>
-                                                {this.state.bookDescription ? <Text>{this.state.bookDescription}</Text> : <Text>Sorry, but there is no description for this book</Text>}
+                                                <ScrollView>
+                                                    <View style={{alignItems: "center", textAlign: "center"}}>
+                                                        <Text h4>{this.state.bookTitle ? this.state.bookTitle : null}</Text>
+                                                        <Text>Description</Text>
+                                                    </View>
+                                                    {this.state.bookDescription ? <Text style={{alignSelf: "center"}}>{this.state.bookDescription}</Text> : null}
+                                                </ScrollView>
                                             </Overlay>
                                         </View>
                                     </Card>
