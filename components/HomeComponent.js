@@ -21,16 +21,37 @@ class HomeComponent extends Component {
             selectedBookType: "",
             genres: GENRES, 
             searchedBooks: "", 
-            isLoading: false
+            isLoading: false,
+            bookDescription: ""
         }
         this.handleChange = this.handleChange.bind(this)
     }
 
-    toggleOverlay = () => {
+    toggleModal = () => {
         this.setState({
             isOpen: !this.state.isOpen
         })
     }
+
+    async getDescription(props) {
+        const res = await fetch(`https://openlibrary.org${props}.json`)
+        if(res.status === 200){
+            const data = await res.json()
+            if(data.description.value){
+                this.setState({
+                    bookDescription: data.description.value
+                })
+            } else {
+                this.setState({
+                    bookDescription: data.description
+                })
+            }
+        } else {
+            alert("Sorry, something went wrong")
+        }
+        this.toggleModal()
+    }
+
     updateSearch = (search) => {
         this.setState({
             search
@@ -88,14 +109,6 @@ class HomeComponent extends Component {
                                 onPress={this.toggleOverlay}
                             />
                         </View>
-                        <View>
-                            <Overlay backdropStyle={{opacity: .4}} isVisible={this.state.isOpen} onBackdropPress={this.toggleOverlay}>
-                                <Card>
-                                    <Text>{item.title}</Text>
-                                    <Text>{item.author}</Text>
-                                </Card>
-                            </Overlay>
-                        </View>
                     </Card>
                 </View>
             )
@@ -114,10 +127,9 @@ class HomeComponent extends Component {
                         />
                         <Text style={{textAlign: "center", fontSize: 25, color: "grey", marginTop: 10}}>OR</Text>
                         <View style={{justifyContent: "center", alignItems: "center", marginTop: 10}}>
-                            <Text>Search by subject</Text>
-                            <View style={{backgroundColor: "white", borderRadius: 20, height: 40, width: 220, marginTop: 10, justifyContent: "center"}}>
+                            <View>
                                 <Picker
-                                    style={{ height: 50, width: 200, color: "grey", marginLeft: "auto"}}
+                                    style={{ height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none"}}
                                     mode="dialog"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
                                 >
@@ -136,14 +148,14 @@ class HomeComponent extends Component {
                         <ScrollView horizontal>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
-                                    <View>
+                                    <Card>
                                         <Image 
                                             source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
                                             style={{height: 250, width: 170, resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
                                             alt={book.title} 
                                         /> 
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>{book.title}</Text>
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap", marginTop: 5}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
                                         {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
                                             <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
                                                 <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4}}/><Text>Borrow available</Text>
@@ -154,8 +166,33 @@ class HomeComponent extends Component {
                                                 <Text>Borrow unavailable</Text>
                                             </View>
                                         }
-                                        <Button>More details</Button> 
-                                    </View>
+                                        <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
+                                            <Button 
+                                                icon={<Icon name="book" size={15} type="font-awesome" />} 
+                                                iconRight
+                                                raised
+                                                buttonStyle={{marginBottom: 10}} title="Save"
+                                            />
+                                            <Button 
+                                                icon={<Icon name="info-circle" size={15} type="font-awesome" />} 
+                                                iconRight
+                                                raised
+                                                buttonStyle={{}} title="More Info"
+                                                onPress={() => this.getDescription(book.key)}
+                                            />
+                                        </View>
+                                        <View>
+                                            <Overlay 
+                                                backdropStyle={{opacity: 0.4}}
+                                                isVisible={this.state.isOpen} 
+                                                onBackdropPress={this.toggleModal}
+                                                overlayStyle={{width: 400, alignSelf: "center", paddingRight: 10, paddingLeft: 10}}
+                                            >
+                                                <Text h4 style={{alignSelf: "center"}}>Description</Text>
+                                                {this.state.bookDescription ? <Text>{this.state.bookDescription}</Text> : <Text>Sorry, but there is no description for this book</Text>}
+                                            </Overlay>
+                                        </View>
+                                    </Card>
                                 )
                             }) : null}
                         </ScrollView>
