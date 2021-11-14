@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
+import { View, StyleSheet, ImageBackground, FlatList, ScrollView, Image } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { Card, Button, Icon, Text, Overlay, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
@@ -38,11 +38,12 @@ class HomeComponent extends Component {
     }
 
     async handleChange(props){
+        const selectedValue = props
         this.setState({
             selectedBookType: props,
             isLoading: true
         })
-        const url = `https://openlibrary.org/subjects/${this.state.selectedBookType}.json`
+        const url = `https://openlibrary.org/subjects/${selectedValue}.json?limit=50`
                                                        
         const res = await fetch(url)
         if(res.status === 200){
@@ -116,7 +117,6 @@ class HomeComponent extends Component {
                             <Text>Search by subject</Text>
                             <View style={{backgroundColor: "white", borderRadius: 20, height: 40, width: 220, marginTop: 10, justifyContent: "center"}}>
                                 <Picker
-                                    // selectedValue={this.state.selectedBookType}
                                     style={{ height: 50, width: 200, color: "grey", marginLeft: "auto"}}
                                     mode="dialog"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
@@ -133,14 +133,32 @@ class HomeComponent extends Component {
                                 </Picker>
                             </View>
                         </View>
-                        <View >
-                            {/* {this.state.searchedBooks ? <RenderSelectedValue searchedBooks={this.state.searchedBooks}/> : null} */}
+                        <ScrollView horizontal>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
-                                    <Text>{book.title}</Text>
+                                    <View>
+                                        <Image 
+                                            source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
+                                            style={{height: 250, width: 170, resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
+                                            alt={book.title} 
+                                        /> 
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>{book.title}</Text>
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                        {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
+                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                                                <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4}}/><Text>Borrow available</Text>
+                                            </View> 
+                                            : 
+                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                                                <Icon name="times-circle" type="font-awesome" color="red" style={{marginRight: 4}}/>
+                                                <Text>Borrow unavailable</Text>
+                                            </View>
+                                        }
+                                        <Button>More details</Button> 
+                                    </View>
                                 )
                             }) : null}
-                        </View>
+                        </ScrollView>
                         <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text>
                         <FlatList
                             horizontal
