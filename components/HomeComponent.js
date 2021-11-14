@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView, Picker } from "react-native"
-import { Card, Button, Icon, Text, Overlay, SearchBar, ThemeConsumer } from "react-native-elements"
+import { View, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
+import { Picker } from "@react-native-picker/picker"
+import { Card, Button, Icon, Text, Overlay, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
 import RenderSelectedValue from "./RenderSelectedValues"
 import { connect } from "react-redux"
@@ -17,10 +18,12 @@ class HomeComponent extends Component {
         this.state = {
             isOpen: false,
             search: "",
-            selectedValue: "",
+            selectedBookType: "",
             genres: GENRES, 
-            searchedBooks: ""
+            searchedBooks: "", 
+            isLoading: false
         }
+        this.handleChange = this.handleChange.bind(this)
     }
 
     toggleOverlay = () => {
@@ -34,11 +37,26 @@ class HomeComponent extends Component {
         })
     }
 
-    handleValueChange = ({itemValue}) => {
+    async handleChange(props){
         this.setState({
-            selectedValue: itemValue
+            selectedBookType: props,
+            isLoading: true
         })
-        console.log(this.state.selectedValue)
+        const url = `https://openlibrary.org/subjects/${this.state.selectedBookType}.json`
+                                                       
+        const res = await fetch(url)
+        if(res.status === 200){
+            const data = await res.json()
+            this.setState({
+                searchedBooks: data.works
+            })
+            console.log(this.state.searchedBooks)
+        } else {
+            alert('Sorry, but something went wrong')
+        }
+        this.setState({
+            isLoading: false
+        })
     }
 
     render(){
@@ -98,22 +116,30 @@ class HomeComponent extends Component {
                             <Text>Search by subject</Text>
                             <View style={{backgroundColor: "white", borderRadius: 20, height: 40, width: 220, marginTop: 10, justifyContent: "center"}}>
                                 <Picker
-                                    selectedValue={this.state.selectedValue}
+                                    // selectedValue={this.state.selectedBookType}
                                     style={{ height: 50, width: 200, color: "grey", marginLeft: "auto"}}
                                     mode="dialog"
-                                    onValueChange={(itemValue) => this.setState({selectedValue: itemValue})}
+                                    onValueChange={(itemValue) => this.handleChange(itemValue)}
                                 >
                                     <Picker.Item label="Search by subject" value="" />
                                     {this.state.genres ? this.state.genres.map(genre => {
                                         return (
-                                            <Picker.Item key={genre.index} label={genre.name} value={genre.value} />
-                                        )
-                                    }) : null}
+                                            <Picker.Item 
+                                                key={genre.index} 
+                                                label={genre.name} 
+                                                value={genre.value.toLowerCase()} />
+                                                )
+                                            }) : null}
                                 </Picker>
                             </View>
                         </View>
-                        <View style={{height: 200}}>
-                            {this.state.selectedValue ? <RenderSelectedValue value={this.state.selectedValue}/> : null}
+                        <View >
+                            {/* {this.state.searchedBooks ? <RenderSelectedValue searchedBooks={this.state.searchedBooks}/> : null} */}
+                            {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
+                                return (
+                                    <Text>{book.title}</Text>
+                                )
+                            }) : null}
                         </View>
                         <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text>
                         <FlatList

@@ -1,13 +1,16 @@
-import React from 'react';
-import {View} from "react-native"
+import React, {Component} from 'react';
+import { View } from "react-native"
 import {Text} from "react-native-elements"
 
-const RenderSelectedValue = ({value}) =>{
-    return (
-        <View>
-            <Text>{value}</Text>
-        </View>
-    );
+class RenderSelectedValue extends Component{
+
+    render(){
+        return (
+            <View>
+
+            </View>
+        );
+    }
 }
 
 export default RenderSelectedValue;
