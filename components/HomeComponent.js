@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, FlatList, ScrollView, Image } from "react-native"
+import { View, StyleSheet, ImageBackground, FlatList, ScrollView, Image, ActivityIndicator } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { Card, Button, Icon, Text, Overlay, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
@@ -34,8 +34,9 @@ class HomeComponent extends Component {
         })
     }
 
-    async getDescription(props) {
-        const res = await fetch(`https://openlibrary.org${props}.json`)
+    async getDescription(props){
+        const bookKey = props
+        const res = await fetch(`https://openlibrary.org${bookKey}.json`)
         if(res.status === 200){
             const data = await res.json()
             console.log(data.title)
@@ -44,16 +45,18 @@ class HomeComponent extends Component {
                     bookDescription: data.description,
                     bookTitle: data.title
                 })
-            } else if(data.description.value){
+            } else null
+            if (data.description.value){
                 this.setState({
                     bookDescription: data.description.value,
                     bookTitle: data.title
                 })
-            } else {
+            } else null
+            if(!data.description && !data.description.value) {
                 this.setState({
                     bookDescription: "Sorry, but there is no description for this book"
                 })
-            }
+            } 
         } else {
             alert("Sorry, something went wrong")
         }
@@ -80,7 +83,6 @@ class HomeComponent extends Component {
             this.setState({
                 searchedBooks: data.works
             })
-            console.log(this.state.searchedBooks)
         } else {
             alert('Sorry, but something went wrong')
         }
@@ -97,7 +99,7 @@ class HomeComponent extends Component {
         const RenderBooks = ({item}) => {
             return (
                 <View>
-                    <Card containerStyle={{backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 2, borderColor: "white"}}>
+                    <Card containerStyle={{backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 2, borderRadius: 20, borderColor: "white"}}>
                         <Image 
                             source={item.imageLink}
                             style={styles.image}
@@ -140,23 +142,29 @@ class HomeComponent extends Component {
                                     style={{ height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none"}}
                                     mode="dialog"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
+                                    selectedValue={this.state.bookType}
                                 >
                                     <Picker.Item label="Search by subject" value="" />
                                     {this.state.genres ? this.state.genres.map(genre => {
                                         return (
                                             <Picker.Item 
-                                                key={genre.index} 
+                                                key={genre.value} 
                                                 label={genre.name} 
-                                                value={genre.value.toLowerCase()} />
+                                                value={genre.value.toLowerCase()} 
+                                            />
                                                 )
                                             }) : null}
                                 </Picker>
                             </View>
                         </View>
                         <ScrollView horizontal>
+                            {this.state.isLoading ? <ActivityIndicator size="large" color="blue" style={{alignSelf: "center", textAlign: "center"}}/> : null}
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
-                                    <Card>
+                                    <Card 
+                                        containerStyle={{backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 2, borderRadius: 20, borderColor: "white"}}
+                                        key={book.cover_edition_key}
+                                    >
                                         <Image 
                                             source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
                                             style={{height: 250, width: 170, resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
@@ -176,22 +184,21 @@ class HomeComponent extends Component {
                                         }
                                         <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
                                             <Button 
-                                                icon={<Icon name="book" size={15} type="font-awesome" />} 
+                                                icon={<Icon name="book" size={15} style={{marginLeft: 5}} type="font-awesome" />} 
                                                 iconRight
-                                                raised
                                                 buttonStyle={{marginBottom: 10}} title="Save"
                                             />
                                             <Button 
-                                                icon={<Icon name="info-circle" size={15} type="font-awesome" />} 
+                                                icon={<Icon name="info-circle" size={15} style={{marginLeft: 5}} type="font-awesome" />} 
                                                 iconRight
-                                                raised
-                                                buttonStyle={{}} title="More Info"
+                                                buttonStyle={{}} 
+                                                title="More Info"
                                                 onPress={() => this.getDescription(book.key)}
                                             />
                                         </View>
                                         <View>
                                             <Overlay 
-                                                backdropStyle={{opacity: 0.4}}
+                                                overlayBackgroundColor={"rgba(0,0,0,.4)"}
                                                 isVisible={this.state.isOpen} 
                                                 onBackdropPress={this.toggleModal}
                                                 overlayStyle={{width: 400, alignSelf: "center", paddingRight: 10, paddingLeft: 10}}
@@ -199,7 +206,6 @@ class HomeComponent extends Component {
                                                 <ScrollView>
                                                     <View style={{alignItems: "center", textAlign: "center"}}>
                                                         <Text h4>{this.state.bookTitle ? this.state.bookTitle : null}</Text>
-                                                        <Text>Description</Text>
                                                     </View>
                                                     {this.state.bookDescription ? <Text style={{alignSelf: "center"}}>{this.state.bookDescription}</Text> : null}
                                                 </ScrollView>
@@ -210,13 +216,13 @@ class HomeComponent extends Component {
                             }) : null}
                         </ScrollView>
                         <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text>
-                        <FlatList
+                        {/* <FlatList
                             horizontal
                             data={books}
                             renderItem={RenderBooks}
-                            keyExtractor={(item, index) => 'key'+index}
+                            keyExtractor={(item) => item.id}
                         >
-                        </FlatList>
+                        </FlatList> */}
                     </ScrollView>
                 </View>
             </ImageBackground>
