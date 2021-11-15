@@ -40,21 +40,10 @@ class HomeComponent extends Component {
         if(res.status === 200){
             const data = await res.json()
             console.log(data)
-            if(data.description && data.description) {
-                this.setState({
-                    bookDescription: data.description,
-                    bookTitle: data.title
-                })
-            } else if (data.description && data.description.value){
-                this.setState({
-                    bookDescription: data.description.value,
-                    bookTitle: data.title
-                })
-            } else {
-                this.setState({
-                    bookDescription: "Sorry, but there is no description for this book"
-                })
-            } 
+            this.setState({
+                bookDescription: data,
+                bookTitle: data.title
+            })
         } else {
             alert("Sorry, something went wrong")
         }
@@ -68,6 +57,7 @@ class HomeComponent extends Component {
     }
 
     async handleChange(props){
+        this.setState({searchedBooks: null})
         const selectedValue = props
         this.setState({
             selectedBookType: props,
@@ -199,13 +189,34 @@ class HomeComponent extends Component {
                                                 style={{backgroundColor: "rgba(0,0,0,0.5)"}}
                                                 isVisible={this.state.isOpen} 
                                                 onBackdropPress={this.toggleModal}
-                                                overlayStyle={{width: 400, alignSelf: "center", paddingRight: 10, paddingLeft: 10}}
+                                                overlayStyle={{width: 500, alignSelf: "center", padding: 20}}
                                             >
                                                 <ScrollView>
+                                                    <ScrollView horizontal>
+                                                        {this.state.bookDescription.covers ? this.state.bookDescription.covers.map(cover => {
+                                                            return (
+                                                                <Image style={{height:200, width:150, resizeMode: "cover"}} source={{uri: `https://covers.openlibrary.org/b/id/${cover}-M.jpg`}} />
+                                                            )
+                                                        }) : null}
+                                                    </ScrollView>
                                                     <View style={{alignItems: "center", textAlign: "center"}}>
                                                         <Text h4>{this.state.bookTitle ? this.state.bookTitle : null}</Text>
                                                     </View>
-                                                    {this.state.bookDescription ? <Text style={{alignSelf: "center"}}>{this.state.bookDescription}</Text> : null}
+                                                    {this.state.bookDescription.description && !this.state.bookDescription.description.value ? 
+                                                        <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description}</Text> 
+                                                    : null}
+                                                    {this.state.bookDescription.description && this.state.bookDescription.description.value ? 
+                                                        <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description.value}</Text> 
+                                                    : null}
+                                                    {!this.state.bookDescription.description ? 
+                                                        <Text style={{alignSelf: "center"}}>Sorry, but there is not description for this book</Text> 
+                                                    : null}
+                                                    {this.state.bookDescription.subject_places ? <Text>Subject Places: </Text> : null}
+                                                    {this.state.bookDescription.subject_places ? this.state.bookDescription.subject_places.map(place => {
+                                                        return (
+                                                            <Text>{place}</Text>
+                                                        )
+                                                    }) : null}
                                                 </ScrollView>
                                             </Overlay>
                                         </View>
