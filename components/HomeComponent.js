@@ -39,20 +39,18 @@ class HomeComponent extends Component {
         const res = await fetch(`https://openlibrary.org${bookKey}.json`)
         if(res.status === 200){
             const data = await res.json()
-            console.log(data.title)
-            if(data.description) {
+            console.log(data)
+            if(data.description && data.description) {
                 this.setState({
                     bookDescription: data.description,
                     bookTitle: data.title
                 })
-            } else null
-            if (data.description.value){
+            } else if (data.description && data.description.value){
                 this.setState({
                     bookDescription: data.description.value,
                     bookTitle: data.title
                 })
-            } else null
-            if(!data.description && !data.description.value) {
+            } else {
                 this.setState({
                     bookDescription: "Sorry, but there is no description for this book"
                 })
@@ -198,7 +196,7 @@ class HomeComponent extends Component {
                                         </View>
                                         <View>
                                             <Overlay 
-                                                overlayBackgroundColor={"rgba(0,0,0,.4)"}
+                                                style={{backgroundColor: "rgba(0,0,0,0.5)"}}
                                                 isVisible={this.state.isOpen} 
                                                 onBackdropPress={this.toggleModal}
                                                 overlayStyle={{width: 400, alignSelf: "center", paddingRight: 10, paddingLeft: 10}}

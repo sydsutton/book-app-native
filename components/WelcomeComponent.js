@@ -21,7 +21,7 @@ class WelcomeComponent extends Component {
         return (
             <ImageBackground source={require("../images/coverImage.jpg")} style={style.image}> 
                 <View style={style.container}>
-                    <Text h2 style={style.text}>YourShelf</Text>
+                    <Text h2 style={{flex: 1, top: 40, color: "#fff"}}>YourShelf</Text>
                     <Text style={{color: 'white', flex: 1, bottom: 120}}>Your very own digital bookshelf</Text>
                     <TouchableOpacity>
                         <Button 
@@ -71,11 +71,6 @@ const style = StyleSheet.create({
     image: {
         flex: 1,
         resizeMode: "cover"
-    },
-    text: {
-        flex: 1,
-        top: 40,
-        color: "#fff",
     }
 })
 
