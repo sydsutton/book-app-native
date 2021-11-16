@@ -18,6 +18,7 @@ class HomeComponent extends Component {
         this.state = {
             isOpen: false,
             search: "",
+            searchData: null,
             selectedBookType: "",
             genres: GENRES, 
             searchedBooks: "", 
@@ -39,7 +40,6 @@ class HomeComponent extends Component {
         const res = await fetch(`https://openlibrary.org${bookKey}.json`)
         if(res.status === 200){
             const data = await res.json()
-            console.log(data)
             this.setState({
                 bookDescription: data,
                 bookTitle: data.title
@@ -54,6 +54,23 @@ class HomeComponent extends Component {
         this.setState({
             search
         })
+        // console.log(this.state.search)
+    }
+
+    async handleSearch(props){
+        this.setState({searchedBooks: null, isLoading: true})
+        const searchValue = props
+        const res = await fetch(`http://openlibrary.org/search.json?q=${searchValue}`)
+        if(res.status === 200){
+            const data = await res.json()
+            this.setState({
+                searchData: data.docs
+            })
+            // console.log(this.state.searchData)
+        } else {
+            console.log("Sorry")
+        }
+        this.setState({isLoading: false})
     }
 
     async handleChange(props){
@@ -123,11 +140,12 @@ class HomeComponent extends Component {
                             onChangeText={this.updateSearch}
                             value={search}
                         />
+                        <Button onPress={() => this.handleSearch(this.state.search)} buttonStyle={{width: 300, justifyContent: "center", textAlign: "center", alignSelf: "center", borderRadius: 20, marginTop: 15}} title="Search" />
                         <Text style={{textAlign: "center", fontSize: 25, color: "grey", marginTop: 10}}>OR</Text>
                         <View style={{justifyContent: "center", alignItems: "center", marginTop: 10}}>
                             <View>
                                 <Picker
-                                    style={{ height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none"}}
+                                    style={{ height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none", marginBottom: 20}}
                                     mode="dialog"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
                                     selectedValue={this.state.bookType}
@@ -147,19 +165,24 @@ class HomeComponent extends Component {
                         </View>
                         {this.state.isLoading ? 
                                 <View style={{textAlign: "center", justifyContent: "center", marginTop: 50}}>
-                                    <ActivityIndicator size="large" color="blue"/>
-                                    <Text style={{color: "blue", textAlign: "center"}}>Loading...</Text>
+                                    <ActivityIndicator size="large" color="#B23963"/>
+                                    <Text style={{color: "#B23963", textAlign: "center"}}>Loading...</Text>
                                 </View> : null}
                         <ScrollView horizontal style={{height: 600}}>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
                                     <Card 
-                                        containerStyle={{backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 2, borderRadius: 20, borderColor: "white"}}
+                                        containerStyle={{backgroundColor: "(rgba(255,255,255,0.75)", borderRadius: 20, shadowColor: 'black',
+                                        height: 570,
+                                        shadowOpacity: 0.26,
+                                        shadowOffset: { width: 0, height: 2},
+                                        shadowRadius: 10,
+                                        elevation: 3}}
                                         key={book.cover_edition_key}
                                     >
                                         <Image 
                                             source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
-                                            style={{height: 250, width: 170, resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
+                                            style={{height: 250, width: 170, alignSelf: "center", resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
                                             alt={book.title} 
                                         /> 
                                         <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
@@ -176,14 +199,15 @@ class HomeComponent extends Component {
                                         }
                                         <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
                                             <Button 
-                                                icon={<Icon name="book" size={15} style={{marginLeft: 5}} type="font-awesome" />} 
+                                                icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                 iconRight
-                                                buttonStyle={{marginBottom: 10}} title="Save"
+                                                buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
+                                                title="Save"
                                             />
                                             <Button 
-                                                icon={<Icon name="info-circle" size={15} style={{marginLeft: 5}} type="font-awesome" />} 
+                                                icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
                                                 iconRight
-                                                buttonStyle={{}} 
+                                                buttonStyle={{width: 200}} 
                                                 title="More Info"
                                                 onPress={() => this.getDescription(book.key)}
                                             />
@@ -224,6 +248,88 @@ class HomeComponent extends Component {
                                                 </ScrollView>
                                             </Overlay>
                                         </View>
+                                    </Card>
+                                )
+                            }) : null}
+                            {this.state.searchData ? this.state.searchData.map(book => {
+                                return (
+                                    <Card 
+                                        containerStyle={{backgroundColor: "(rgba(255,255,255,0.75)", borderRadius: 20, shadowColor: 'black',
+                                        height: 570,
+                                        shadowOpacity: 0.26,
+                                        shadowOffset: { width: 0, height: 2},
+                                        shadowRadius: 10,
+                                        elevation: 3}}
+                                        key={book.cover_edition_key}
+                                    >
+                                        <Image 
+                                            source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
+                                            style={{height: 250, width: 170, alignSelf: "center", resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
+                                            alt={book.title} 
+                                        /> 
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
+                                        {/* <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text> */}
+                                        {/* {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
+                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                                                <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4}}/><Text>Borrow available</Text>
+                                            </View> 
+                                            : 
+                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                                                <Icon name="times-circle" type="font-awesome" color="red" style={{marginRight: 4}}/>
+                                                <Text>Borrow unavailable</Text>
+                                            </View>
+                                        } */}
+                                        <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
+                                            <Button 
+                                                icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                iconRight
+                                                buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
+                                                title="Save"
+                                            />
+                                            <Button 
+                                                icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
+                                                iconRight
+                                                buttonStyle={{width: 200}} 
+                                                title="More Info"
+                                                onPress={() => this.getDescription(book.key)}
+                                            />
+                                        </View>
+                                        {/* <View>
+                                            <Overlay 
+                                                style={{backgroundColor: "rgba(0,0,0,0.5)"}}
+                                                isVisible={this.state.isOpen} 
+                                                onBackdropPress={this.toggleModal}
+                                                overlayStyle={{width: 500, alignSelf: "center", padding: 20}}
+                                            >
+                                                <ScrollView>
+                                                    <ScrollView horizontal>
+                                                        {this.state.bookDescription.covers ? this.state.bookDescription.covers.map(cover => {
+                                                            return (
+                                                                <Image style={{height:200, width:150, resizeMode: "cover"}} source={{uri: `https://covers.openlibrary.org/b/id/${cover}-M.jpg`}} />
+                                                            )
+                                                        }) : null}
+                                                    </ScrollView>
+                                                    <View style={{alignItems: "center", textAlign: "center"}}>
+                                                        <Text h4 style={{textDecorationLine: "underline"}}>{this.state.bookTitle ? this.state.bookTitle : null}</Text>
+                                                    </View>
+                                                    {this.state.bookDescription.description && !this.state.bookDescription.description.value ? 
+                                                        <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description}</Text> 
+                                                    : null}
+                                                    {this.state.bookDescription.description && this.state.bookDescription.description.value ? 
+                                                        <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description.value}</Text> 
+                                                    : null}
+                                                    {!this.state.bookDescription.description ? 
+                                                        <Text style={{alignSelf: "center"}}>Sorry, but there is not description for this book</Text> 
+                                                    : null}
+                                                    {this.state.bookDescription.subject_places ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
+                                                    {this.state.bookDescription.subject_places ? this.state.bookDescription.subject_places.map(place => {
+                                                        return (
+                                                            <Text key={place}>{place}</Text>
+                                                        )
+                                                    }) : null}
+                                                </ScrollView>
+                                            </Overlay>
+                                        </View> */}
                                     </Card>
                                 )
                             }) : null}
