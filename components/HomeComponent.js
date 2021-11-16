@@ -145,8 +145,12 @@ class HomeComponent extends Component {
                                 </Picker>
                             </View>
                         </View>
-                        <ScrollView horizontal>
-                            {this.state.isLoading ? <ActivityIndicator size="large" color="blue" style={{alignSelf: "center", textAlign: "center"}}/> : null}
+                        {this.state.isLoading ? 
+                                <View style={{textAlign: "center", justifyContent: "center", marginTop: 50}}>
+                                    <ActivityIndicator size="large" color="blue"/>
+                                    <Text style={{color: "blue", textAlign: "center"}}>Loading...</Text>
+                                </View> : null}
+                        <ScrollView horizontal style={{height: 600}}>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
                                     <Card 
@@ -159,7 +163,7 @@ class HomeComponent extends Component {
                                             alt={book.title} 
                                         /> 
                                         <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap", marginTop: 5}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
                                         {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
                                             <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
                                                 <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4}}/><Text>Borrow available</Text>
@@ -200,7 +204,7 @@ class HomeComponent extends Component {
                                                         }) : null}
                                                     </ScrollView>
                                                     <View style={{alignItems: "center", textAlign: "center"}}>
-                                                        <Text h4>{this.state.bookTitle ? this.state.bookTitle : null}</Text>
+                                                        <Text h4 style={{textDecorationLine: "underline"}}>{this.state.bookTitle ? this.state.bookTitle : null}</Text>
                                                     </View>
                                                     {this.state.bookDescription.description && !this.state.bookDescription.description.value ? 
                                                         <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description}</Text> 
@@ -211,10 +215,10 @@ class HomeComponent extends Component {
                                                     {!this.state.bookDescription.description ? 
                                                         <Text style={{alignSelf: "center"}}>Sorry, but there is not description for this book</Text> 
                                                     : null}
-                                                    {this.state.bookDescription.subject_places ? <Text>Subject Places: </Text> : null}
+                                                    {this.state.bookDescription.subject_places ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
                                                     {this.state.bookDescription.subject_places ? this.state.bookDescription.subject_places.map(place => {
                                                         return (
-                                                            <Text>{place}</Text>
+                                                            <Text key={place}>{place}</Text>
                                                         )
                                                     }) : null}
                                                 </ScrollView>
@@ -224,7 +228,7 @@ class HomeComponent extends Component {
                                 )
                             }) : null}
                         </ScrollView>
-                        <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text>
+                        {/* <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text> */}
                         {/* <FlatList
                             horizontal
                             data={books}

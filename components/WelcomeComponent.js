@@ -50,7 +50,6 @@ class WelcomeComponent extends Component {
                             <Button 
                                 title="login" 
                                 onPress={this.toggleLogin}
-                                type="submit"
                                 />
                         </Card>
                     </Overlay>
