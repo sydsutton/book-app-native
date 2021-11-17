@@ -77,8 +77,8 @@ class MainComponent extends Component {
                 <Header 
                     backgroundColor="#4CAAD1"
                     leftComponent={{ icon: 'menu', color: '#fff', iconStyle: { color: '#fff' } }}
-                    centerComponent={{ text: 'YourShelf', style: { color: '#fff', fontWeight: "bold"} }}
-                    rightComponent={{ icon: 'login', color: '#fff' }}
+                    rightComponent={{ icon: "login", color: '#fff'}}
+                    elevated="true"
                 />
                 <MyTabs/>
             </NavigationContainer>

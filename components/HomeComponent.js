@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, FlatList, ScrollView, Image, ActivityIndicator } from "react-native"
+import { View, StyleSheet, ImageBackground, ScrollView, Image, ActivityIndicator } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { Card, Button, Icon, Text, Overlay, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
-import RenderSelectedValue from "./RenderSelectedValues"
 import { connect } from "react-redux"
+import SearchSubject from "./SearchSubjectComponent"
+import SearchTitle from "./SearchTitleComponent"
 
 const mapStateToProps = (state) => {
     return {
@@ -54,11 +55,10 @@ class HomeComponent extends Component {
         this.setState({
             search
         })
-        // console.log(this.state.search)
     }
 
     async handleSearch(props){
-        this.setState({searchedBooks: null, isLoading: true})
+        this.setState({searchedBooks: null, isLoading: true, selectedBookType: ""})
         const searchValue = props
         const res = await fetch(`http://openlibrary.org/search.json?q=${searchValue}`)
         if(res.status === 200){
@@ -66,15 +66,15 @@ class HomeComponent extends Component {
             this.setState({
                 searchData: data.docs
             })
-            // console.log(this.state.searchData)
+            console.log(this.state.searchData)
         } else {
-            console.log("Sorry")
+            alert("Sorry, something went wrong")
         }
         this.setState({isLoading: false})
     }
 
     async handleChange(props){
-        this.setState({searchedBooks: null})
+        this.setState({searchedBooks: null, searchData: null, search: ""})
         const selectedValue = props
         this.setState({
             selectedBookType: props,
@@ -148,7 +148,7 @@ class HomeComponent extends Component {
                                     style={{ height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none", marginBottom: 20}}
                                     mode="dialog"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
-                                    selectedValue={this.state.bookType}
+                                    selectedValue={this.state.selectedBookType}
                                 >
                                     <Picker.Item label="Search by subject" value="" />
                                     {this.state.genres ? this.state.genres.map(genre => {
@@ -237,7 +237,7 @@ class HomeComponent extends Component {
                                                         <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description.value}</Text> 
                                                     : null}
                                                     {!this.state.bookDescription.description ? 
-                                                        <Text style={{alignSelf: "center"}}>Sorry, but there is not description for this book</Text> 
+                                                        <Text style={{alignSelf: "center"}}>Sorry, but there is no description for this book</Text> 
                                                     : null}
                                                     {this.state.bookDescription.subject_places ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
                                                     {this.state.bookDescription.subject_places ? this.state.bookDescription.subject_places.map(place => {
@@ -268,17 +268,8 @@ class HomeComponent extends Component {
                                             alt={book.title} 
                                         /> 
                                         <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
-                                        {/* <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text> */}
-                                        {/* {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
-                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                                                <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4}}/><Text>Borrow available</Text>
-                                            </View> 
-                                            : 
-                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                                                <Icon name="times-circle" type="font-awesome" color="red" style={{marginRight: 4}}/>
-                                                <Text>Borrow unavailable</Text>
-                                            </View>
-                                        } */}
+                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
+                                        <Text>{book.first_publish_year ? `First published in ${book.first_publish_year}` : null}</Text>
                                         <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
                                             <Button 
                                                 icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
@@ -294,7 +285,7 @@ class HomeComponent extends Component {
                                                 onPress={() => this.getDescription(book.key)}
                                             />
                                         </View>
-                                        {/* <View>
+                                        <View>
                                             <Overlay 
                                                 style={{backgroundColor: "rgba(0,0,0,0.5)"}}
                                                 isVisible={this.state.isOpen} 
@@ -329,19 +320,11 @@ class HomeComponent extends Component {
                                                     }) : null}
                                                 </ScrollView>
                                             </Overlay>
-                                        </View> */}
+                                        </View>
                                     </Card>
                                 )
                             }) : null}
                         </ScrollView>
-                        {/* <Text style={{fontSize: 25, fontWeight: "bold"}}>100 Must-Read Books of All Time</Text> */}
-                        {/* <FlatList
-                            horizontal
-                            data={books}
-                            renderItem={RenderBooks}
-                            keyExtractor={(item) => item.id}
-                        >
-                        </FlatList> */}
                     </ScrollView>
                 </View>
             </ImageBackground>
