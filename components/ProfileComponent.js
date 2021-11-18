@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, ImageBackground} from "react-native"
-import { Button, Image, Text } from "react-native-elements"
+import { Button, Image, Text, Card } from "react-native-elements"
 
 class ProfileComponent extends Component {
     constructor(props){
@@ -38,21 +38,28 @@ class ProfileComponent extends Component {
     render(){
         return (
             <ImageBackground source={require("../images/backgroundImage.jpg")} style={{resizeMode: "cover", flex: 1}}>
-                {this.state.userData ? 
-                <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-                    <Image style={{width: 160, height: 160, borderRadius: 300, shadowOpacity: 0.26, shadowOffset: { width: 0, height: 2}, shadowRadius: 10, elevation: 3}} 
-                        source={{uri: `${this.state.userData.picture.large}`}} 
-                    /> 
-                    <Text h4 style={{fontWeight: "bold"}}>{this.state.userData.name.first} {this.state.userData.name.last}</Text>
-                    <View style={{margin: 0, paddingTop: 40, height: 160}}>
-                        <Text style={{fontSize: 20}}>Username: <Text style={{fontWeight: "bold"}}>{this.state.userData.login.username}</Text></Text>
-                        <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                            <Text style={{fontSize: 20, marginRight: 20}}>Password: <Text style={{fontWeight: "bold"}}>{this.state.password}</Text></Text>
-                            {this.state.password.includes("*") ? <Button title="Show password" onPress={this.handlePassword} /> : <Button title="Hide password" onPress={this.handlePassword} />}
+                <View style={{flex: 1, alignItems: "center"}}>
+                    {this.state.userData ? 
+                    <Card containerStyle={{justifyContent: "center", borderRadius: 30, marginTop: 100}}>
+                        <View style={{position: "absolute", bottom: 160, left: 61, top:-95}}>
+                            <Image style={{width: 160, height: 160, borderRadius: 300}} 
+                                source={{uri: `${this.state.userData.picture.large}`}} 
+                            /> 
                         </View>
-                    </View>
+                        <View style={{borderBottomWidth: 1, borderColor: "rgba(0,0,0,.2)", paddingBottom: 10}}>
+                            <Text h4 style={{fontWeight: "bold", alignSelf: "center", marginTop: 70}}>{this.state.userData.name.first}</Text>
+                            <Text h4 style={{fontWeight: "bold", alignSelf: "center"}}>{this.state.userData.name.last}</Text>
+                        </View>
+                        <View style={{margin: 0, paddingTop: 40, height: 160}}>
+                            <Text style={{fontSize: 15}}>Username: <Text style={{fontWeight: "bold", fontSize: 18}}>{this.state.userData.login.username}</Text></Text>
+                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                                <Text style={{fontSize: 15, marginRight: 20}}>Password: <Text style={{fontWeight: "bold", fontSize: 18}}>{this.state.password}</Text></Text>
+                                {this.state.password.includes("*") ? <Button title="Show password" onPress={this.handlePassword} /> : <Button title="Hide password" onPress={this.handlePassword} />}
+                            </View>
+                        </View>
+                    </Card>
+                    : null}
                 </View>
-               : null}
             </ImageBackground>
         )
     }

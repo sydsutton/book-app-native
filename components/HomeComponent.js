@@ -66,7 +66,6 @@ class HomeComponent extends Component {
             this.setState({
                 searchData: data.docs
             })
-            console.log(this.state.searchData)
         } else {
             alert("Sorry, something went wrong")
         }
@@ -98,36 +97,8 @@ class HomeComponent extends Component {
 
     render(){
 
-        const {books} = this.props
         const {search} = this.state
 
-        const RenderBooks = ({item}) => {
-            return (
-                <View>
-                    <Card containerStyle={{backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 2, borderRadius: 20, borderColor: "white"}}>
-                        <Image 
-                            source={item.imageLink}
-                            style={styles.image}
-                        />
-                        <Text style={styles.text}>{item.title}</Text>
-                        <Text style={{paddingBottom: 10}}>{item.author}</Text>
-                        <View style={{flex: 1, flexDirection: "row", justifyContent: "space-around"}}>
-                            <Button 
-                                buttonStyle={{width: 100}}
-                                title="save"
-                                onPress={() => alert(item.title)}
-                            />
-                            <Button 
-                                type="outline" 
-                                buttonStyle={{width: 100}}
-                                title="more info"
-                                onPress={this.toggleOverlay}
-                            />
-                        </View>
-                    </Card>
-                </View>
-            )
-        }
         return (
             <ImageBackground source={require("../images/backgroundImage.jpg")} style={{resizeMode: "cover", flex: 1}}>
                 <View>
@@ -143,9 +114,9 @@ class HomeComponent extends Component {
                         <Button onPress={() => this.handleSearch(this.state.search)} buttonStyle={{width: 300, justifyContent: "center", textAlign: "center", alignSelf: "center", borderRadius: 20, marginTop: 15}} title="Search" />
                         <Text style={{textAlign: "center", fontSize: 25, color: "grey", marginTop: 10}}>OR</Text>
                         <View style={{justifyContent: "center", alignItems: "center", marginTop: 10}}>
-                            <View>
+                            <View style={{backgroundColor: "white", borderRadius: 20, height: 40}}>
                                 <Picker
-                                    style={{ height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none", marginBottom: 20}}
+                                    style={{height: 50, width: 200, color: "grey", marginLeft: "auto", borderRadius: 30, textAlign: "center", border: "none", marginBottom: 20}}
                                     mode="dialog"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
                                     selectedValue={this.state.selectedBookType}
@@ -156,7 +127,7 @@ class HomeComponent extends Component {
                                             <Picker.Item 
                                                 key={genre.value} 
                                                 label={genre.name} 
-                                                value={genre.value.toLowerCase()} 
+                                                value={genre.value.toLowerCase()} f
                                             />
                                                 )
                                             }) : null}
@@ -173,7 +144,7 @@ class HomeComponent extends Component {
                                 return (
                                     <Card 
                                         containerStyle={{backgroundColor: "(rgba(255,255,255,0.75)", borderRadius: 20, shadowColor: 'black',
-                                        height: 570,
+                                        height: 550,
                                         shadowOpacity: 0.26,
                                         shadowOffset: { width: 0, height: 2},
                                         shadowRadius: 10,
@@ -185,19 +156,19 @@ class HomeComponent extends Component {
                                             style={{height: 250, width: 170, alignSelf: "center", resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
                                             alt={book.title} 
                                         /> 
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                        <Text style={{width: 200, fontWeight: "bold", fontSize: 18}}>{book.title}</Text>
+                                        <Text style={{width: 150, marginTop: 20}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
                                         {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
-                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                                                <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4}}/><Text>Borrow available</Text>
+                                            <View style={{alignItems: "center"}}>
+                                                <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4, marginTop: 20}}/><Text>Borrow available</Text>
                                             </View> 
                                             : 
-                                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                                                <Icon name="times-circle" type="font-awesome" color="red" style={{marginRight: 4}}/>
+                                            <View style={{alignItems: "center"}}>
+                                                <Icon name="times-circle" type="font-awesome" color="red" style={{marginRight: 4, marginTop: 20}}/>
                                                 <Text>Borrow unavailable</Text>
                                             </View>
                                         }
-                                        <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
+                                        <View style={{alignItems: "center", marginTop: 10}}>
                                             <Button 
                                                 icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                 iconRight
@@ -217,7 +188,7 @@ class HomeComponent extends Component {
                                                 style={{backgroundColor: "rgba(0,0,0,0.5)"}}
                                                 isVisible={this.state.isOpen} 
                                                 onBackdropPress={this.toggleModal}
-                                                overlayStyle={{width: 500, alignSelf: "center", padding: 20}}
+                                                overlayStyle={{alignSelf: "center", padding: 20}}
                                             >
                                                 <ScrollView>
                                                     <ScrollView horizontal>
@@ -267,10 +238,10 @@ class HomeComponent extends Component {
                                             style={{height: 250, width: 170, alignSelf: "center", resizeMode: "cover", marginRight: 5, marginLeft: 5, marginTop: 10}}
                                             alt={book.title} 
                                         /> 
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap", fontWeight: "bold"}}>{book.title}</Text>
-                                        <Text style={{width: 150, flex: 1, flexWrap: "wrap"}}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
+                                        <Text style={{width: 150, fontWeight: "bold", fontSize: 18}}>{book.title}</Text>
+                                        <Text style={{width: 150, marginTop: 20}}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
                                         <Text>{book.first_publish_year ? `First published in ${book.first_publish_year}` : null}</Text>
-                                        <View style={{flex: 1, flexDirection: "column", alignItems: "center", marginTop: 10}}>
+                                        <View style={{alignItems: "center", marginTop: 10}}>
                                             <Button 
                                                 icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                 iconRight
@@ -290,7 +261,7 @@ class HomeComponent extends Component {
                                                 style={{backgroundColor: "rgba(0,0,0,0.5)"}}
                                                 isVisible={this.state.isOpen} 
                                                 onBackdropPress={this.toggleModal}
-                                                overlayStyle={{width: 500, alignSelf: "center", padding: 20}}
+                                                overlayStyle={{alignSelf: "center", padding: 20}}
                                             >
                                                 <ScrollView>
                                                     <ScrollView horizontal>
