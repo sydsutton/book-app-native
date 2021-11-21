@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from "react-native"
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Modal } from "react-native"
 import {Button, Icon, Text, Overlay, Card, Input } from "react-native-elements"
 
 
@@ -7,13 +7,20 @@ class WelcomeComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            isLoginOpen: false
+            isLoginOpen: false,
+            isCreateOpen: false
         }
     }
 
     toggleLogin = () => {
         this.setState({
             isLoginOpen: !this.state.isLoginOpen
+        })
+    }
+
+    toggleCreate = () => {
+        this.setState({
+            isCreateOpen: !this.state.isCreateOpen
         })
     }
 
@@ -33,26 +40,71 @@ class WelcomeComponent extends Component {
                             buttonStyle={{width: 200, borderRadius: 20, marginBottom: 50, borderWidth: 2}} 
                             title="create account"
                             type="outline"
-                            onPress={this.toggleLogin}/>
+                            onPress={this.toggleCreate}/>
                     </TouchableOpacity>
-                    <Overlay isVisible={this.state.isLoginOpen} onBackdropPress={this.toggleLogin}>
-                        <Card containerStyle={{width: 300}}>
-                            <Text h4 style={{textAlign: "center"}}>Login</Text>
-                            <Input 
-                                placeholder="   email or username"
-                                leftIcon={<Icon name="user" type="font-awesome" color="grey"/>}
-                            />
-                            <Input 
-                                placeholder="   password"
-                                leftIcon={<Icon name="lock" type="font-awesome" color="grey"/>}
-                                secureTextEntry={true}
-                            />
-                            <Button 
-                                title="login" 
-                                onPress={this.toggleLogin}
+
+                    <Modal 
+                        animationType="slide"
+                        visible={this.state.isLoginOpen} 
+                        onRequestClose={() => this.toggleLogin()}
+                        statusBarTranslucent={true}
+                    >
+                        <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                            <Button buttonStyle={{backgroundColor: "transparent"}} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleLogin()} />
+                                <Text h4 style={{textAlign: "center"}}>Login</Text>
+                                <Input 
+                                    placeholder="   email or username"
+                                    leftIcon={<Icon name="user" type="font-awesome" color="grey"/>}
                                 />
-                        </Card>
-                    </Overlay>
+                                <Input 
+                                    placeholder="   password"
+                                    leftIcon={<Icon name="lock" type="font-awesome" color="grey"/>}
+                                    secureTextEntry={true}
+                                />
+                                <Button 
+                                    title="create account" 
+                                    onPress={this.toggleLogin}
+                                    />
+                        </View>
+                    </Modal>
+
+                    <Modal 
+                        animationType="slide"
+                        visible={this.state.isCreateOpen} 
+                        onRequestClose={() => this.toggleCreate()}
+                        statusBarTranslucent={true}
+                    >
+                        <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                            <Button buttonStyle={{backgroundColor: "transparent", marginLeft: 300, marginBottom: 120}} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleCreate()} />
+                            <Text h4 style={{textAlign: "center" }}>Create an account</Text>
+                            <View style={{justifyContent: "center", alignItems: "center", width: 250, marginTop: 50}}>
+                                <Input 
+                                    placeholder="first name"
+                                />
+                                <Input 
+                                    placeholder="last name"
+                                />
+                                <Input 
+                                    placeholder="email address"
+                                />
+                                <Input 
+                                    placeholder="username"
+                                />
+                                <Input 
+                                    placeholder="password"
+                                    secureTextEntry={true}
+                                />
+                                <Input 
+                                    placeholder="re-enter password"
+                                    secureTextEntry={true}
+                                />
+                                <Button 
+                                    title="create account" 
+                                    onPress={this.toggleCreate}
+                                    />
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </ImageBackground>
         );
@@ -63,7 +115,6 @@ const style = StyleSheet.create({
     container:{
         flex: 1,
         flexDirection: "column",
-        // paddingTop: ( Platform.OS === 'ios' ) ? 20 : 0,
         alignItems: "center",
         justifyContent: "center"
     },

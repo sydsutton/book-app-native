@@ -17,7 +17,7 @@ class ProfileComponent extends Component {
         const res = await fetch(url)
         const data = await res.json()
         this.setState({userData: data.results[0]})
-        console.log(this.state.userData)
+        // console.log(this.state.userData)
         let password = this.state.userData.login.password
         let newPassword = password.replace(/[a-z0-9]/gi, "*")
         this.setState({password: newPassword})
