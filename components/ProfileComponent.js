@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import {View, ImageBackground} from "react-native"
+import {View, ImageBackground, StyleSheet } from "react-native"
 import { Button, Image, Text, Card } from "react-native-elements"
+import { connect } from "react-redux"
+
+const mapStateToProps = state => {
+    return {
+        userInfo: state
+    }
+}
 
 class ProfileComponent extends Component {
     constructor(props){
@@ -37,26 +44,27 @@ class ProfileComponent extends Component {
 
     render(){
         return (
-            <ImageBackground source={require("../images/backgroundImage.jpg")} style={{resizeMode: "cover", flex: 1}}>
-                <View style={{flex: 1, alignItems: "center"}}>
+            <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
+                <View style={styles.container}>
                     {this.state.userData ? 
-                    <Card containerStyle={{justifyContent: "center", borderRadius: 30, marginTop: 100}}>
-                        <View style={{position: "absolute", bottom: 160, left: 61, top:-95}}>
-                            <Image style={{width: 160, height: 160, borderRadius: 300}} 
+                    <Card containerStyle={styles.card}>
+                        <View style={styles.imageContainer}>
+                            <Image style={styles.image} 
                                 source={{uri: `${this.state.userData.picture.large}`}} 
                             /> 
                         </View>
-                        <View style={{borderBottomWidth: 1, borderColor: "rgba(0,0,0,.2)", paddingBottom: 10}}>
-                            <Text h4 style={{fontWeight: "bold", alignSelf: "center", marginTop: 70}}>{this.state.userData.name.first}</Text>
-                            <Text h4 style={{fontWeight: "bold", alignSelf: "center"}}>{this.state.userData.name.last}</Text>
+                        <View style={styles.nameContainer}>
+                            <Text h4 style={styles.firstName}>{this.state.userData.name.first}</Text>
+                            <Text h4 style={styles.lastName}>{this.state.userData.name.last}</Text>
                         </View>
-                        <View style={{margin: 0, paddingTop: 40, height: 160}}>
-                            <Text style={{fontSize: 15}}>Username: <Text style={{fontWeight: "bold", fontSize: 18}}>{this.state.userData.login.username}</Text></Text>
-                            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                                <Text style={{fontSize: 15, marginRight: 20}}>Password: <Text style={{fontWeight: "bold", fontSize: 18}}>{this.state.password}</Text></Text>
+                        <View style={styles.userContainer}>
+                            <Text style={{fontSize: 15}}>Username: <Text style={styles.text}>{this.state.userData.login.username}</Text></Text>
+                            <View style={styles.passContainer}>
+                                <Text style={styles.password}>Password: <Text style={styles.text}>{this.state.password}</Text></Text>
                                 {this.state.password.includes("*") ? <Button title="Show password" onPress={this.handlePassword} /> : <Button title="Hide password" onPress={this.handlePassword} />}
                             </View>
                         </View>
+                        <Button title="press" onPress={() => console.log(this.props.userInfo)} />
                     </Card>
                     : null}
                 </View>
@@ -65,4 +73,63 @@ class ProfileComponent extends Component {
     }
 }
 
-export default ProfileComponent;
+const styles = StyleSheet.create({
+    imageBackground: {
+        resizeMode: "cover", 
+        flex: 1
+    },
+    container: {
+        flex: 1, 
+        alignItems: "center"
+    },
+    card: {
+        justifyContent: "center", 
+        borderRadius: 30, 
+        marginTop: 100
+    },
+    imageContainer: {
+        position: "absolute", 
+        bottom: 160, 
+        left: 61, 
+        top:-95
+    },
+    image: {
+        width: 160, 
+        height: 160, 
+        borderRadius: 300
+    },
+    nameContainer: {
+        borderBottomWidth: 1, 
+        borderColor: "rgba(0,0,0,.2)", 
+        paddingBottom: 10
+    },
+    firstName: {
+        fontWeight: "bold", 
+        alignSelf: "center", 
+        marginTop: 70
+    },
+    lastName: {
+        fontWeight: "bold", 
+        alignSelf: "center"
+    },
+    userContainer: {
+        margin: 0, 
+        paddingTop: 40, 
+        height: 160
+    },
+    passContainer: {
+        flex: 1, 
+        flexDirection: "row", 
+        alignItems: "center"
+    },
+    password: {
+        fontSize: 15, 
+        marginRight: 20
+    },
+    text: {
+        fontWeight: "bold", 
+        fontSize: 18
+    }
+})
+
+export default connect(mapStateToProps)(ProfileComponent)

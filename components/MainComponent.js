@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import Home from "./HomeComponent"
-import Search from "./SearchComponent"
 import Saved from "./SavedComponent"
 import Profile from "./ProfileComponent"
 import Welcome from "./WelcomeComponent"
 import {Icon, Header} from "react-native-elements"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-
 
 const Tab = createBottomTabNavigator()
 
@@ -32,6 +30,9 @@ function MyTabs() {
                 },
                 tabBarActiveTintColor: '#308CC1',
                 tabBarInactiveTintColor: 'gray',
+                style: {
+                    height: "10%"
+                }
             })}>
             <Tab.Screen 
                 name="Welcome"
@@ -47,10 +48,6 @@ function MyTabs() {
                     headerShown: false,  
                   }}   
             />
-            {/* <Tab.Screen 
-                name="Search" 
-                component={Search}
-            /> */}
             <Tab.Screen 
                 name="Saved" 
                 component={Saved}

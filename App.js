@@ -1,10 +1,10 @@
 import React from "react"
 import Main from "./components/MainComponent"
-import { Provider } from "react-redux"
 import { createStore } from "redux"
-import bookReducer from "./redux/bookReducer"
+import { Provider } from "react-redux"
+import { userInfo } from "./redux/profile"
 
-const store = createStore(bookReducer)
+const store = createStore(userInfo)
 
 export default function App() {
   return (

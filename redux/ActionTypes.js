@@ -1,1 +1,1 @@
-export const LOAD_BOOKS = "LOAD_BOOKS"
+export const SAVE_PROFILE = 'SAVE_PROFILE'
