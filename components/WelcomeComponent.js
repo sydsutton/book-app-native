@@ -4,6 +4,12 @@ import {Button, Icon, Text, Overlay, Card, Input } from "react-native-elements"
 import { connect } from "react-redux"
 import { saveProfile } from "../redux/ActionCreators"
 
+const mapStateToProps = state => {
+    return {
+        userInfo: state
+    }
+}
+
 const mapDispatchToProps = {
     saveProfile: (userInfo) => saveProfile(userInfo)
 }
@@ -18,7 +24,10 @@ class WelcomeComponent extends Component {
             lastName: "",
             email: "",
             username: "",
-            password: ""
+            password: "",
+            loginUsername: "",
+            loginPassword: "",
+            isLoggedIn: false
         }
     }
 
@@ -34,12 +43,25 @@ class WelcomeComponent extends Component {
         })
     }
 
+    async handleLogin(){
+        if(this.state.loginUsername != "" && this.state.loginPassword != ""){
+            if(this.state.loginUsername === this.props.userInfo.user.username && this.state.loginPassword === this.props.userInfo.user.password){
+                await this.setState({isLoggedIn: true})
+                this.props.saveProfile(this.state)
+            } else null
+        } else {
+            this.props.saveProfile(this.state)
+            console.log("Sorry, we don't have record of that username/ password combo")
+        }
+    }
+
     render(){
         return (
             <ImageBackground source={require("../images/coverImage.jpg")} style={styles.image}> 
                 <View style={styles.container}>
                     <Text h2 style={styles.title}>YourShelf</Text>
                     <Text style={styles.subtitle}>Your very own digital bookshelf</Text>
+                    <Text>{JSON.stringify(this.props.userInfo.user.isLoggedIn)}</Text>
                     <TouchableOpacity>
                         <Button 
                             icon={<Icon name="login" color="#fff" style={{marginRight: 10}}/>} 
@@ -63,17 +85,23 @@ class WelcomeComponent extends Component {
                             <Button buttonStyle={{backgroundColor: "transparent"}} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleLogin()} />
                                 <Text h4 style={{textAlign: "center"}}>Login</Text>
                                 <Input 
-                                    placeholder="   email or username"
+                                    placeholder="   username"
+                                    onChangeText={loginUsername => this.setState({loginUsername: loginUsername})}
                                     leftIcon={<Icon name="user" type="font-awesome" color="grey"/>}
+                                    
                                 />
                                 <Input 
                                     placeholder="   password"
                                     leftIcon={<Icon name="lock" type="font-awesome" color="grey"/>}
+                                    onChangeText={loginPassword => this.setState({loginPassword: loginPassword})}
                                     secureTextEntry={true}
                                 />
                                 <Button 
-                                    title="create account" 
-                                    onPress={this.toggleLogin}
+                                    title="login" 
+                                    onPress={() => {
+                                        this.handleLogin()
+                                        this.toggleLogin()
+                                    }}
                                     />
                         </View>
                     </Modal>
@@ -173,4 +201,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(null, mapDispatchToProps)(WelcomeComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomeComponent)
