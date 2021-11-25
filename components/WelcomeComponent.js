@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { View, StyleSheet, ImageBackground, TouchableOpacity, Modal } from "react-native"
-import {Button, Icon, Text, Overlay, Card, Input } from "react-native-elements"
+import {Button, Icon, Text, Overlay, Card, Input, ThemeConsumer } from "react-native-elements"
 import { connect } from "react-redux"
 import { saveProfile } from "../redux/ActionCreators"
 
@@ -25,9 +25,11 @@ class WelcomeComponent extends Component {
             email: "",
             username: "",
             password: "",
+            confirmPassword: "",
             loginUsername: "",
             loginPassword: "",
-            isLoggedIn: false
+            isLoggedIn: false,
+            errorMessage: ""
         }
     }
 
@@ -43,15 +45,26 @@ class WelcomeComponent extends Component {
         })
     }
 
+    handleLogOut = () => {
+        this.setState({
+            isLoggedIn: false,
+        })
+        this.props.saveProfile(this.state)
+    }
+
     async handleLogin(){
         if(this.state.loginUsername != "" && this.state.loginPassword != ""){
             if(this.state.loginUsername === this.props.userInfo.user.username && this.state.loginPassword === this.props.userInfo.user.password){
                 await this.setState({isLoggedIn: true})
                 this.props.saveProfile(this.state)
-            } else null
+                this.toggleLogin()
+            } else {
+                this.setState({
+                    errorMessage: "We don't have record of that user name/ password combination"
+                })
+            }
         } else {
             this.props.saveProfile(this.state)
-            console.log("Sorry, we don't have record of that username/ password combo")
         }
     }
 
@@ -61,18 +74,38 @@ class WelcomeComponent extends Component {
                 <View style={styles.container}>
                     <Text h2 style={styles.title}>YourShelf</Text>
                     <Text style={styles.subtitle}>Your very own digital bookshelf</Text>
-                    <Text>{JSON.stringify(this.props.userInfo.user.isLoggedIn)}</Text>
                     <TouchableOpacity>
-                        <Button 
-                            icon={<Icon name="login" color="#fff" style={{marginRight: 10}}/>} 
-                            buttonStyle={styles.loginButton} 
-                            title="login"
-                            onPress={this.toggleLogin}/>
-                        <Button 
-                            buttonStyle={styles.createButton} 
-                            title="create account"
-                            type="outline"
-                            onPress={this.toggleCreate}/>
+                        {this.props.userInfo.user.isLoggedIn ? 
+                            <View>
+                                <Button 
+                                    icon={<Icon name="check" color="#fff" style={{marginRight: 10}}/>} 
+                                    buttonStyle={[styles.loginButton, styles.loggedIn]} 
+                                    title="logged in"
+                                />
+                                <Button 
+                                    icon={<Icon name="sign-out" color="#1e81b0" type="font-awesome" style={{marginRight: 10}}/>}
+                                    buttonStyle={styles.createButton} 
+                                    title="log out"
+                                    type="outline"
+                                    onPress={this.handleLogOut}
+                                />
+                            </View>
+                        :
+                            <View>
+                                <Button 
+                                    icon={<Icon name="login" color="#fff" style={{marginRight: 10}}/>} 
+                                    buttonStyle={styles.loginButton} 
+                                    title="login"
+                                    onPress={this.toggleLogin}
+                                />
+                                <Button 
+                                    buttonStyle={styles.createButton} 
+                                    title="create account"
+                                    type="outline"
+                                    onPress={this.toggleCreate}
+                                />
+                            </View>
+                        }
                     </TouchableOpacity>
 
                     <Modal 
@@ -82,27 +115,26 @@ class WelcomeComponent extends Component {
                         statusBarTranslucent={true}
                     >
                         <View style={styles.loginContainer}>
-                            <Button buttonStyle={{backgroundColor: "transparent"}} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleLogin()} />
+                            <Button buttonStyle={styles.closeButton} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleLogin()} />
                                 <Text h4 style={{textAlign: "center"}}>Login</Text>
                                 <Input 
                                     placeholder="   username"
                                     onChangeText={loginUsername => this.setState({loginUsername: loginUsername})}
                                     leftIcon={<Icon name="user" type="font-awesome" color="grey"/>}
-                                    
+                                    errorMessage={this.state.loginUsername === "" ? "Username is required" : ""}
                                 />
                                 <Input 
                                     placeholder="   password"
                                     leftIcon={<Icon name="lock" type="font-awesome" color="grey"/>}
                                     onChangeText={loginPassword => this.setState({loginPassword: loginPassword})}
                                     secureTextEntry={true}
+                                    errorMessage={this.state.loginPassword === "" ? "Password is required" : ""}
                                 />
                                 <Button 
                                     title="login" 
-                                    onPress={() => {
-                                        this.handleLogin()
-                                        this.toggleLogin()
-                                    }}
-                                    />
+                                    onPress={() => this.handleLogin()}
+                                />
+                                <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
                         </View>
                     </Modal>
 
@@ -113,38 +145,46 @@ class WelcomeComponent extends Component {
                         statusBarTranslucent={true}
                     >
                         <View style={styles.loginContainer}>
-                            <Button buttonStyle={{backgroundColor: "transparent", marginLeft: 300, marginBottom: 120}} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleCreate()} />
+                            <Button buttonStyle={styles.closeButton} title="" icon={<Icon name="times" type="font-awesome" />} onPress={() => this.toggleCreate()} />
                             <Text h4 style={{textAlign: "center" }}>Create an account</Text>
                             <View style={{justifyContent: "center", alignItems: "center", width: 250, marginTop: 50}}>
                                 <Input 
                                     placeholder="first name"
                                     onChangeText={firstName => this.setState({firstName: firstName})}
                                     value={this.state.firstName}
+                                    errorMessage={this.state.firstName === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="last name"
                                     onChangeText={lastName => this.setState({lastName: lastName})}
                                     value={this.state.lastName}
+                                    errorMessage={this.state.lastName === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="email address"
                                     onChangeText={email => this.setState({email: email})}
                                     value={this.state.email}
+                                    errorMessage={this.state.email === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="username"
                                     onChangeText={username => this.setState({username: username})}
                                     value={this.state.username}
+                                    errorMessage={this.state.username === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="password"
                                     onChangeText={password => this.setState({password: password})}
                                     value={this.state.password}
                                     secureTextEntry={true}
+                                    errorMessage={this.state.password === "" ? "Please enter a password" : null}
                                 />
                                 <Input 
                                     placeholder="re-enter password"
                                     secureTextEntry={true}
+                                    onChangeText={confirmPassword => this.setState({confirmPassword: confirmPassword})}
+                                    value={this.state.confirmPassword}
+                                    errorMessage={this.state.password === this.state.confirmPassword ? "Those passwords don't match" : null}
                                 />
                                 <Button 
                                     title="create account" 
@@ -195,9 +235,23 @@ const styles = StyleSheet.create({
         borderWidth: 2
     },
     loginContainer: {
-        flex: 1, 
         alignItems: "center", 
-        justifyContent: "center"
+        justifyContent: "center",
+        marginLeft: 50,
+        width: 300
+    },
+    closeButton: {
+        backgroundColor: "transparent", 
+        marginTop: 30, 
+        marginLeft: 250
+    },
+    errorMessage: {
+        color: "red",
+        marginTop: 30,
+        textAlign: "center"
+    },
+    loggedIn: {
+        backgroundColor: "green"
     }
 })
 
