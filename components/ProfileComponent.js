@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {View, ImageBackground, StyleSheet } from "react-native"
 import { Button, Image, Text, Card } from "react-native-elements"
 import { connect } from "react-redux"
+import * as ImagePicker from 'expo-image-picker'
 
 const mapStateToProps = state => {
     return {
@@ -13,7 +14,8 @@ class ProfileComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            password: ""
+            password: "",
+            image: ""
         }
     }
 
@@ -30,6 +32,20 @@ class ProfileComponent extends Component {
 // }
 
     componentDidMount(){
+        (async () => {
+            if (Platform.OS !== 'web') {
+              const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+              if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+              }
+            }
+          }
+        )
+        if(this.props.userInfo.user.isLoggedIn){
+            this.setState({password: this.props.userInfo.user.password.replace(/[a-z0-9]/gi, "*")})
+        } else {
+            null
+        }
         if(this.props.userInfo.user.password){
             let password = this.props.userInfo.user.password
             let newPassword = password.replace(/[a-z0-9]/gi, "*")
@@ -38,6 +54,19 @@ class ProfileComponent extends Component {
             null
         }
     }
+
+    pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+
+        if (!result.cancelled) {
+            this.setState({image: result.uri})
+          }
+        }
 
     handlePassword = () => {
         if(this.state.password.includes("*")){
@@ -58,10 +87,17 @@ class ProfileComponent extends Component {
                     {this.props.userInfo.user.isLoggedIn ? 
                     <Card containerStyle={styles.card}>
                         <View style={styles.imageContainer}>
+                            {this.state.image ? 
+                            <Image style={styles.image}
+                                source={{uri: this.state.image}} 
+                            />
+                            :
                             <Image style={styles.image} 
                                 source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
                             /> 
+                            }
                         </View>
+                        <Button onPress={() => this.pickImage()} title="+" buttonStyle={styles.addImage}/>
                         <View style={styles.nameContainer}>
                             <Text h4 style={styles.firstName}>{this.props.userInfo.user.firstName}</Text>
                             <Text h4 style={styles.lastName}>{this.props.userInfo.user.lastName}</Text>
@@ -73,14 +109,13 @@ class ProfileComponent extends Component {
                                 {this.state.password.includes("*") ? <Button buttonStyle={styles.passwordButton} title="Show password" onPress={this.handlePassword} /> : <Button buttonStyle={styles.passwordButton} title="Hide password" onPress={this.handlePassword} />}
                             </View>
                         </View>
-                        <Button title="press" onPress={() => console.log(this.props.userInfo)} />
                     </Card>
                     : 
                     <Card containerStyle={styles.card}>
                         <View style={styles.imageContainer}>
                             <Image style={styles.image} 
                                 source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
-                            /> 
+                            />
                         </View>
                         <View style={styles.nameContainer}>
                             <Text h4 style={styles.firstName}>No user data</Text>
@@ -129,7 +164,6 @@ const styles = StyleSheet.create({
     firstName: {
         fontWeight: "bold", 
         alignSelf: "center", 
-        marginTop: 70
     },
     lastName: {
         fontWeight: "bold", 
@@ -155,8 +189,15 @@ const styles = StyleSheet.create({
     },
     passwordButton: {
         fontSize: 8,
-        width: 100,
-        padding: 2
+        width: 150,
+        padding: 2,
+        borderRadius: 20
+    },
+    addImage: {
+        width: 40,
+        borderRadius: 200,
+        marginLeft: 175,
+        marginTop: 20
     }
 })
 

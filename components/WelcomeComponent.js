@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity, Modal } from "react-native"
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Modal, Alert } from "react-native"
 import {Button, Icon, Text, Overlay, Card, Input, ThemeConsumer } from "react-native-elements"
 import { connect } from "react-redux"
 import { saveProfile } from "../redux/ActionCreators"
@@ -46,13 +46,27 @@ class WelcomeComponent extends Component {
     }
 
     handleLogOut = () => {
-        this.setState({
-            isLoggedIn: false,
-        })
-        this.props.saveProfile(this.state)
+        Alert.alert(
+            "Are you sure you want to log out?",
+            "",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Ok", 
+                    onPress: () => {
+                        this.setState({isLoggedIn: false})
+                        this.props.saveProfile(this.state)
+                    }
+                }
+            ]
+        )
     }
 
     async handleLogin(){
+        this.setState({errorMessage: ""})
         if(this.state.loginUsername != "" && this.state.loginPassword != ""){
             if(this.state.loginUsername === this.props.userInfo.user.username && this.state.loginPassword === this.props.userInfo.user.password){
                 await this.setState({isLoggedIn: true})
@@ -87,7 +101,7 @@ class WelcomeComponent extends Component {
                                     buttonStyle={styles.createButton} 
                                     title="log out"
                                     type="outline"
-                                    onPress={this.handleLogOut}
+                                    onPress={() => this.handleLogOut()}
                                 />
                             </View>
                         :
@@ -184,7 +198,7 @@ class WelcomeComponent extends Component {
                                     secureTextEntry={true}
                                     onChangeText={confirmPassword => this.setState({confirmPassword: confirmPassword})}
                                     value={this.state.confirmPassword}
-                                    errorMessage={this.state.password === this.state.confirmPassword ? "Those passwords don't match" : null}
+                                    errorMessage={(this.state.password != this.state.confirmPassword) && this.state.confirmPassword != "" ? "Those passwords don't match" : ""}
                                 />
                                 <Button 
                                     title="create account" 

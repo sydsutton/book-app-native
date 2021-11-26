@@ -3,7 +3,7 @@ import Home from "./HomeComponent"
 import Saved from "./SavedComponent"
 import Profile from "./ProfileComponent"
 import Welcome from "./WelcomeComponent"
-import {Icon, Header} from "react-native-elements"
+import { Icon } from "react-native-elements"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
@@ -71,12 +71,6 @@ class MainComponent extends Component {
     render() {
         return (
             <NavigationContainer>
-                <Header 
-                    backgroundColor="#4CAAD1"
-                    leftComponent={{ icon: 'menu', color: '#fff', iconStyle: { color: '#fff' } }}
-                    rightComponent={{ icon: "login", color: '#fff'}}
-                    elevated="true"
-                />
                 <MyTabs/>
             </NavigationContainer>
         );
