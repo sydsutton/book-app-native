@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {View, ImageBackground, StyleSheet } from "react-native"
-import { Button, Image, Text, Card } from "react-native-elements"
+import { Button, Image, Text, Card, Icon } from "react-native-elements"
 import { connect } from "react-redux"
 import * as ImagePicker from 'expo-image-picker'
+import Welcome from "./WelcomeComponent"
+import { saveProfile } from "../redux/ActionCreators"
 
 const mapStateToProps = state => {
     return {
@@ -10,26 +12,19 @@ const mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProps = {
+    saveProfile: (userInfo) => saveProfile(userInfo)
+}
+
 class ProfileComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
             password: "",
-            image: ""
+            image: "",
+            isLoggedIn: this.props.userInfo.user.isLoggedIn
         }
     }
-
-//     async componentDidMount(){
-//         const url = `https://randomuser.me/api/`
-        
-//         const res = await fetch(url)
-//         const data = await res.json()
-//         this.setState({userData: data.results[0]})
-//         // console.log(this.state.userData)
-//         let password = this.state.userData.login.password
-//         let newPassword = password.replace(/[a-z0-9]/gi, "*")
-//         this.setState({password: newPassword})
-// }
 
     componentDidMount(){
         (async () => {
@@ -82,50 +77,47 @@ class ProfileComponent extends Component {
 
     render(){
         return (
-            <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
-                <View style={styles.container}>
+                <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
                     {this.props.userInfo.user.isLoggedIn ? 
-                    <Card containerStyle={styles.card}>
-                        <View style={styles.imageContainer}>
-                            {this.state.image ? 
-                            <Image style={styles.image}
-                                source={{uri: this.state.image}} 
-                            />
-                            :
-                            <Image style={styles.image} 
-                                source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
-                            /> 
-                            }
-                        </View>
-                        <Button onPress={() => this.pickImage()} title="+" buttonStyle={styles.addImage}/>
-                        <View style={styles.nameContainer}>
-                            <Text h4 style={styles.firstName}>{this.props.userInfo.user.firstName}</Text>
-                            <Text h4 style={styles.lastName}>{this.props.userInfo.user.lastName}</Text>
-                        </View>
-                        <View style={styles.userContainer}>
-                            <Text style={{fontSize: 15}}>Username: <Text style={styles.text}>{this.props.userInfo.user.username}</Text></Text>
-                            <View style={styles.passContainer}>
-                                <Text style={styles.password}>Password: <Text style={styles.text}>{this.state.password}</Text></Text>
-                                {this.state.password.includes("*") ? <Button buttonStyle={styles.passwordButton} title="Show password" onPress={this.handlePassword} /> : <Button buttonStyle={styles.passwordButton} title="Hide password" onPress={this.handlePassword} />}
+                    <View style={styles.container}>
+                        <Button onPress={() => {
+                            this.setState({isLoggedIn: false})
+                            this.props.saveProfile(this.state)
+                            }} 
+                            buttonStyle={{marginLeft: 300, marginTop: 50, borderRadius: 8}}
+                            title=""
+                            icon={<Icon name="sign-out" type="font-awesome" color="white"  />} 
+                        />
+                        <Card containerStyle={styles.card}>
+                            <View style={styles.imageContainer}>
+                                {this.state.image ? 
+                                <Image style={styles.image}
+                                    source={{uri: this.state.image}} 
+                                />
+                                :
+                                <Image style={styles.image} 
+                                    source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
+                                /> 
+                                }
                             </View>
-                        </View>
-                    </Card>
+                            <Button onPress={() => this.pickImage()} title="+" buttonStyle={styles.addImage}/>
+                            <View style={styles.nameContainer}>
+                                <Text h4 style={styles.firstName}>{this.props.userInfo.user.firstName}</Text>
+                                <Text h4 style={styles.lastName}>{this.props.userInfo.user.lastName}</Text>
+                            </View>
+                            <View style={styles.userContainer}>
+                                <Text style={{fontSize: 15}}>Username: <Text style={styles.text}>{this.props.userInfo.user.username}</Text></Text>
+                                <View style={styles.passContainer}>
+                                    <Text style={styles.password}>Password: <Text style={styles.text}>{this.state.password}</Text></Text>
+                                    {this.state.password.includes("*") ? <Button buttonStyle={styles.passwordButton} title="Show password" onPress={this.handlePassword} /> : <Button buttonStyle={styles.passwordButton} title="Hide password" onPress={this.handlePassword} />}
+                                </View>
+                            </View>
+                        </Card>
+                    </View>
                     : 
-                    <Card containerStyle={styles.card}>
-                        <View style={styles.imageContainer}>
-                            <Image style={styles.image} 
-                                source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
-                            />
-                        </View>
-                        <View style={styles.nameContainer}>
-                            <Text h4 style={styles.firstName}>No user data</Text>
-                        </View>
-                        <View style={styles.userContainer}>
-                            
-                        </View>
-                    </Card>}
-                </View>
-            </ImageBackground>
+                    <Welcome />
+                }
+                </ImageBackground>
         )
     }
 }
@@ -198,7 +190,26 @@ const styles = StyleSheet.create({
         borderRadius: 200,
         marginLeft: 175,
         marginTop: 20
+    },
+    noUser: {
+        fontWeight: "bold", 
+        alignSelf: "center", 
+        marginTop: 70
     }
 })
 
-export default connect(mapStateToProps)(ProfileComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileComponent)
+
+                    // <Card containerStyle={styles.card}>
+                    //     <View style={styles.imageContainer}>
+                    //         <Image style={styles.image} 
+                    //             source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
+                    //         />
+                    //     </View>
+                    //     <View style={styles.nameContainer}>
+                    //         <Text h4 style={styles.noUser}>No user data</Text>
+                    //     </View>
+                    //     <View style={styles.userContainer}>
+                            
+                    //     </View>
+                    // </Card>

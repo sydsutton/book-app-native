@@ -2,9 +2,9 @@ import React from "react"
 import Main from "./components/MainComponent"
 import { createStore } from "redux"
 import { Provider } from "react-redux"
-import { userInfo } from "./redux/profile"
+import { profile } from "./redux/profile"
 
-const store = createStore(userInfo)
+const store = createStore(profile)
 
 export default function App() {
   return (

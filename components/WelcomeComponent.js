@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { View, StyleSheet, ImageBackground, TouchableOpacity, Modal, Alert } from "react-native"
-import {Button, Icon, Text, Overlay, Card, Input, ThemeConsumer } from "react-native-elements"
+import {Button, Icon, Text, Overlay, Card, Input } from "react-native-elements"
 import { connect } from "react-redux"
 import { saveProfile } from "../redux/ActionCreators"
 

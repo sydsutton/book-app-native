@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Home from "./HomeComponent"
 import Saved from "./SavedComponent"
 import Profile from "./ProfileComponent"
-import Welcome from "./WelcomeComponent"
 import { Icon } from "react-native-elements"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
@@ -22,9 +21,7 @@ function MyTabs() {
                     iconName = focused ? 'book-open' : 'book-open';
                 } else if (route.name === "Profile"){
                     iconName = focused ? "user-circle" : "user-circle"
-                } else if (route.name === "Welcome"){
-                    iconName = focused ? "hand-paper" : "hand-paper"
-                }
+                } 
     
                 return <Icon name={iconName} size={size} color={color} type="font-awesome-5"/>;
                 },
@@ -34,13 +31,6 @@ function MyTabs() {
                     height: "10%"
                 }
             })}>
-            <Tab.Screen 
-                name="Welcome"
-                component={Welcome}
-                options={{  
-                    headerShown: false,  
-                  }}   
-            />
             <Tab.Screen 
                 name="Home"
                 component={Home}
