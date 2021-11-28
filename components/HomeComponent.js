@@ -1,21 +1,23 @@
+//firebase authentification
+//hooks
+
 import React, {Component} from 'react';
 import { View, StyleSheet, ImageBackground, ScrollView, Image, Modal, ActivityIndicator } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { Card, Button, Icon, Text, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
-// import { connect } from "react-redux"
-// import { saveProfile } from "../redux/ActionCreators"
+import { connect } from "react-redux"
+import { saveBook } from "../redux/ActionCreators"
 
-// const mapStateToProps = state => {
-//     return {
-//         books: state
-//     }
-// }
+const mapStateToProps = state => {
+    return {
+        books: state.save.books
+    }
+}
 
-// const mapDispatchToProps = {
-//     saveBook: (bookId) => saveProfile(bookId)
-// }
-
+const mapDispatchToProps = {
+    saveBook
+}
 
 class HomeComponent extends Component {
     constructor(props){
@@ -85,7 +87,6 @@ class HomeComponent extends Component {
             alert("Sorry, something went wrong")
         }
         this.setState({isLoading: false})
-        console.log(this.state.searchData)
     }
 
     async handleChange(props){
@@ -112,7 +113,7 @@ class HomeComponent extends Component {
     }
 
     render(){
-
+        console.log(this.props.books.length)
         const {search} = this.state
 
         return (
@@ -183,10 +184,9 @@ class HomeComponent extends Component {
                                                     iconRight
                                                     buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
                                                     title="Save"
-                                                    // onPress={() => {
-                                                    //     this.props.saveBook(book.title)
-                                                    //     console.log(this.props.books)
-                                                    // }}
+                                                    onPress={() => {
+                                                        this.props.saveBook(book)
+                                                    }}
                                                 />
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
@@ -306,7 +306,7 @@ class HomeComponent extends Component {
                                                         <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description.value}</Text> 
                                                     : null}
                                                     {!this.state.bookDescription.description ? 
-                                                        <Text style={{alignSelf: "center"}}>Sorry, but there is not description for this book</Text> 
+                                                        <Text style={{alignSelf: "center"}}>Sorry, but there is no description for this book</Text> 
                                                     : null}
                                                     {this.state.bookDescription.subjectPlaces ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
                                                     {this.state.bookDescription.subjectPlaces ? this.state.bookDescription.subjectPlaces.map(place => {
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
         marginLeft: "auto", 
         borderRadius: 30, 
         textAlign: "center", 
-        marginBottom: 20
+        marginBottom: 20,
     },
     loadingContainer: {
         textAlign: "center", 
@@ -456,6 +456,6 @@ const styles = StyleSheet.create({
     }
 })
 
-// export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent)
 
-export default HomeComponent
+// export default HomeComponent

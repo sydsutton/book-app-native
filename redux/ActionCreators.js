@@ -5,7 +5,7 @@ export const saveProfile = userInfo => ({
     payload: userInfo
 })
 
-// export const saveBook = bookId => ({
-//     type: ActionTypes.SAVE_BOOK,
-//     payload: bookId
-// })
+export const saveBook = book => ({
+    type: ActionTypes.SAVE_BOOK,
+    payload: book
+})
