@@ -3,6 +3,19 @@ import { View, StyleSheet, ImageBackground, ScrollView, Image, Modal, ActivityIn
 import { Picker } from "@react-native-picker/picker"
 import { Card, Button, Icon, Text, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
+// import { connect } from "react-redux"
+// import { saveProfile } from "../redux/ActionCreators"
+
+// const mapStateToProps = state => {
+//     return {
+//         books: state
+//     }
+// }
+
+// const mapDispatchToProps = {
+//     saveBook: (bookId) => saveProfile(bookId)
+// }
+
 
 class HomeComponent extends Component {
     constructor(props){
@@ -50,7 +63,6 @@ class HomeComponent extends Component {
         } else {
             alert("Sorry, something went wrong")
         }
-
         this.state.selectedBookType && !this.state.searchData ? this.toggleSubjectModal() : this.toggleTitleModal()  
     }
 
@@ -110,7 +122,7 @@ class HomeComponent extends Component {
                         <SearchBar
                             placeholder="Search by title"
                             lightTheme
-                            containerStyle={{backgroundColor: "transparent"}}
+                            containerStyle={{backgroundColor: "transparent", marginTop: 75}}
                             inputContainerStyle={styles.inputContainer}
                             onChangeText={this.updateSearch}
                             value={search}
@@ -171,6 +183,10 @@ class HomeComponent extends Component {
                                                     iconRight
                                                     buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
                                                     title="Save"
+                                                    // onPress={() => {
+                                                    //     this.props.saveBook(book.title)
+                                                    //     console.log(this.props.books)
+                                                    // }}
                                                 />
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
@@ -439,5 +455,7 @@ const styles = StyleSheet.create({
         fontSize: 18
     }
 })
+
+// export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent)
 
 export default HomeComponent

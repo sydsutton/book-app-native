@@ -68,7 +68,7 @@ class WelcomeComponent extends Component {
     async handleLogin(){
         this.setState({errorMessage: ""})
         if(this.state.loginUsername != "" && this.state.loginPassword != ""){
-            if(this.state.loginUsername === this.props.userInfo.user.username && this.state.loginPassword === this.props.userInfo.user.password){
+            if(this.state.loginUsername === this.props.userInfo.username && this.state.loginPassword === this.props.userInfo.password){
                 await this.setState({isLoggedIn: true})
                 this.props.saveProfile(this.state)
                 this.toggleLogin()
@@ -83,13 +83,14 @@ class WelcomeComponent extends Component {
     }
 
     render(){
+        const { isLoginOpen, isCreateOpen, firstName, lastName, email, username, password, confirmPassword, loginUsername, loginPassword, isLoggedIn, errorMessage } = this.state
         return (
             <ImageBackground source={require("../images/coverImage.jpg")} style={styles.image}> 
                 <View style={styles.container}>
                     <Text h2 style={styles.title}>YourShelf</Text>
                     <Text style={styles.subtitle}>Your very own digital bookshelf</Text>
                     <TouchableOpacity>
-                        {this.props.userInfo.user.isLoggedIn ? 
+                        {this.props.userInfo.isLoggedIn ? 
                             <View>
                                 <Button 
                                     icon={<Icon name="check" color="#fff" style={{marginRight: 10}}/>} 
@@ -124,7 +125,7 @@ class WelcomeComponent extends Component {
 
                     <Modal 
                         animationType="slide"
-                        visible={this.state.isLoginOpen} 
+                        visible={isLoginOpen} 
                         onRequestClose={() => this.toggleLogin()}
                         statusBarTranslucent={true}
                     >
@@ -135,26 +136,26 @@ class WelcomeComponent extends Component {
                                     placeholder="   username"
                                     onChangeText={loginUsername => this.setState({loginUsername: loginUsername})}
                                     leftIcon={<Icon name="user" type="font-awesome" color="grey"/>}
-                                    errorMessage={this.state.loginUsername === "" ? "Username is required" : ""}
+                                    errorMessage={loginUsername === "" ? "Username is required" : ""}
                                 />
                                 <Input 
                                     placeholder="   password"
                                     leftIcon={<Icon name="lock" type="font-awesome" color="grey"/>}
                                     onChangeText={loginPassword => this.setState({loginPassword: loginPassword})}
                                     secureTextEntry={true}
-                                    errorMessage={this.state.loginPassword === "" ? "Password is required" : ""}
+                                    errorMessage={loginPassword === "" ? "Password is required" : ""}
                                 />
                                 <Button 
                                     title="login" 
                                     onPress={() => this.handleLogin()}
                                 />
-                                <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                                <Text style={styles.errorMessage}>{errorMessage}</Text>
                         </View>
                     </Modal>
 
                     <Modal 
                         animationType="slide"
-                        visible={this.state.isCreateOpen} 
+                        visible={isCreateOpen} 
                         onRequestClose={() => this.toggleCreate()}
                         statusBarTranslucent={true}
                     >
@@ -165,40 +166,40 @@ class WelcomeComponent extends Component {
                                 <Input 
                                     placeholder="first name"
                                     onChangeText={firstName => this.setState({firstName: firstName})}
-                                    value={this.state.firstName}
-                                    errorMessage={this.state.firstName === "" ? "Please enter a username" : null}
+                                    value={firstName}
+                                    errorMessage={firstName === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="last name"
                                     onChangeText={lastName => this.setState({lastName: lastName})}
-                                    value={this.state.lastName}
-                                    errorMessage={this.state.lastName === "" ? "Please enter a username" : null}
+                                    value={lastName}
+                                    errorMessage={lastName === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="email address"
                                     onChangeText={email => this.setState({email: email})}
-                                    value={this.state.email}
-                                    errorMessage={this.state.email === "" ? "Please enter a username" : null}
+                                    value={email}
+                                    errorMessage={email === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="username"
                                     onChangeText={username => this.setState({username: username})}
-                                    value={this.state.username}
-                                    errorMessage={this.state.username === "" ? "Please enter a username" : null}
+                                    value={username}
+                                    errorMessage={username === "" ? "Please enter a username" : null}
                                 />
                                 <Input 
                                     placeholder="password"
                                     onChangeText={password => this.setState({password: password})}
-                                    value={this.state.password}
+                                    value={password}
                                     secureTextEntry={true}
-                                    errorMessage={this.state.password === "" ? "Please enter a password" : null}
+                                    errorMessage={password === "" ? "Please enter a password" : null}
                                 />
                                 <Input 
                                     placeholder="re-enter password"
                                     secureTextEntry={true}
                                     onChangeText={confirmPassword => this.setState({confirmPassword: confirmPassword})}
-                                    value={this.state.confirmPassword}
-                                    errorMessage={(this.state.password != this.state.confirmPassword) && this.state.confirmPassword != "" ? "Those passwords don't match" : ""}
+                                    value={confirmPassword}
+                                    errorMessage={(password != confirmPassword) && confirmPassword != "" ? "Those passwords don't match" : ""}
                                 />
                                 <Button 
                                     title="create account" 
