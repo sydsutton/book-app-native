@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ImageBackground, FlatList, Image, ScrollView } 
 import { Card, Avatar, Button, Icon } from "react-native-elements"
 import { connect } from "react-redux"
 import { deleteBook } from "../redux/ActionCreators"
+import { readBook } from "../redux/ActionCreators"
 
 const mapStateToProps = state => {
     return {
@@ -11,7 +12,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    deleteBook
+    deleteBook,
+    readBook
 }
 
 class SavedComponent extends Component {
@@ -44,6 +46,10 @@ class SavedComponent extends Component {
                                 icon={<Icon name="arrow-right" color="#fff" size={12} type="font-awesome"/>}
                                 title="   I've read it"
                                 titleStyle={{fontSize: 12}}
+                                onPress={() => {
+                                    this.props.readBook(item)
+                                    this.props.deleteBook(item)
+                                }}
                             />
                         </View>
                     </Card>

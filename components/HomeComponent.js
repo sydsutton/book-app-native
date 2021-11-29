@@ -12,7 +12,8 @@ import { saveBook } from "../redux/ActionCreators"
 const mapStateToProps = state => {
     return {
         books: state.save.books,
-        user: state.profile
+        user: state.profile,
+        readBooks: state.read.readBooks
     }
 }
 
@@ -186,7 +187,15 @@ class HomeComponent extends Component {
                                                             title="saved"
                                                         />
                                                         :
+                                                    this.props.readBooks.includes(book) ? 
 
+                                                        <Button 
+                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            iconRight
+                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "orange", textColor: "black"}} 
+                                                            title="You've read it!"
+                                                        />
+                                                    :
                                                         <Button 
                                                             icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
@@ -196,7 +205,6 @@ class HomeComponent extends Component {
                                                                 this.props.saveBook(book)
                                                             }}
                                                         />
-                                                    
                                                 }
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
@@ -271,15 +279,42 @@ class HomeComponent extends Component {
                                             <Text style={{width: 150, marginTop: 20}}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
                                             <Text>{book.first_publish_year ? `First published in ${book.first_publish_year}` : null}</Text>
                                             <View style={{alignItems: "center", marginTop: 10}}>
-                                                <Button 
-                                                    icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
-                                                    iconRight
-                                                    buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
-                                                    title="Save"
-                                                    onPress={() => {
-                                                        this.props.saveBook(book)
-                                                    }}
-                                                />
+                                            {!this.props.user.isLoggedIn ? 
+                                                    <Button 
+                                                        iconRight
+                                                        buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                        title="Login in to save"
+                                                    />
+
+                                                    :
+
+                                                    this.props.user.isLoggedIn && this.props.books.includes(book) ? 
+                                                        <Button 
+                                                            icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            iconRight
+                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                            title="saved"
+                                                        />
+                                                        :
+                                                    this.props.readBooks.includes(book) ? 
+
+                                                        <Button 
+                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            iconRight
+                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "orange", textColor: "black"}} 
+                                                            title="You've read it!"
+                                                        />
+                                                    :
+                                                        <Button 
+                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            iconRight
+                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
+                                                            title="Save"
+                                                            onPress={() => {
+                                                                this.props.saveBook(book)
+                                                            }}
+                                                        />
+                                                }
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
                                                     iconRight

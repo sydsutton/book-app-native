@@ -4,8 +4,9 @@ import { createStore, combineReducers } from "redux"
 import { Provider } from "react-redux"
 import { profile } from "./redux/profile"
 import { save } from "./redux/save"
+import { read } from "./redux/read"
 
-const rootReducer = combineReducers({profile, save})
+const rootReducer = combineReducers({profile, save, read})
 
 const store = createStore(rootReducer)
 
