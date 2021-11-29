@@ -68,7 +68,7 @@ class WelcomeComponent extends Component {
     async handleLogin(){
         this.setState({errorMessage: ""})
         if(this.state.loginUsername != "" && this.state.loginPassword != ""){
-            if(this.state.loginUsername === this.props.userInfo.username && this.state.loginPassword === this.props.userInfo.password){
+            if(this.state.loginUsername === this.props.userInfo.profile.username && this.state.loginPassword === this.props.userInfo.profile.password){
                 await this.setState({isLoggedIn: true})
                 this.props.saveProfile(this.state)
                 this.toggleLogin()
@@ -83,6 +83,7 @@ class WelcomeComponent extends Component {
     }
 
     render(){
+        console.log(this.props.userInfo.profile.profile)
         const { isLoginOpen, isCreateOpen, firstName, lastName, email, username, password, confirmPassword, loginUsername, loginPassword, isLoggedIn, errorMessage } = this.state
         return (
             <ImageBackground source={require("../images/coverImage.jpg")} style={styles.image}> 
@@ -90,7 +91,7 @@ class WelcomeComponent extends Component {
                     <Text h2 style={styles.title}>YourShelf</Text>
                     <Text style={styles.subtitle}>Your very own digital bookshelf</Text>
                     <TouchableOpacity>
-                        {this.props.userInfo.isLoggedIn ? 
+                        {this.props.userInfo.profile.isLoggedIn ? 
                             <View>
                                 <Button 
                                     icon={<Icon name="check" color="#fff" style={{marginRight: 10}}/>} 

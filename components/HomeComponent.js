@@ -11,7 +11,8 @@ import { saveBook } from "../redux/ActionCreators"
 
 const mapStateToProps = state => {
     return {
-        books: state.save.books
+        books: state.save.books,
+        user: state.profile
     }
 }
 
@@ -167,26 +168,36 @@ class HomeComponent extends Component {
                                             /> 
                                             <Text style={styles.cardTitle}>{book.title}</Text>
                                             <Text style={{width: 150, marginTop: 20}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
-                                            {book.availability && book.availability.status === 'borrow_available' || book.availability && book.availability.status == 'open' ? 
-                                                <View style={{alignItems: "center"}}>
-                                                    <Icon name="check-circle" type="font-awesome" color="green" style={{marginRight: 4, marginTop: 20}}/><Text>Borrow available</Text>
-                                                </View> 
-                                                : 
-                                                <View style={{alignItems: "center"}}>
-                                                    <Icon name="times-circle" type="font-awesome" color="red" style={{marginRight: 4, marginTop: 20}}/>
-                                                    <Text>Borrow unavailable</Text>
-                                                </View>
-                                            }
                                             <View style={{alignItems: "center", marginTop: 10}}>
-                                                <Button 
-                                                    icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
-                                                    iconRight
-                                                    buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
-                                                    title="Save"
-                                                    onPress={() => {
-                                                        this.props.saveBook(book)
-                                                    }}
-                                                />
+                                                {!this.props.user.isLoggedIn ? 
+                                                    <Button 
+                                                        iconRight
+                                                        buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                        title="Login in to save"
+                                                    />
+
+                                                    :
+
+                                                    this.props.user.isLoggedIn && this.props.books.includes(book) ? 
+                                                        <Button 
+                                                            icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            iconRight
+                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                            title="saved"
+                                                        />
+                                                        :
+
+                                                        <Button 
+                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            iconRight
+                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
+                                                            title="Save"
+                                                            onPress={() => {
+                                                                this.props.saveBook(book)
+                                                            }}
+                                                        />
+                                                    
+                                                }
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
                                                     iconRight

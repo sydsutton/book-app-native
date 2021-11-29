@@ -22,7 +22,7 @@ class ProfileComponent extends Component {
         this.state = {
             password: "",
             image: "",
-            isLoggedIn: this.props.userInfo.isLoggedIn 
+            isLoggedIn: this.props.userInfo.profile.isLoggedIn 
         }
     }
 
@@ -36,13 +36,13 @@ class ProfileComponent extends Component {
             }
           }
         )
-        if(this.props.userInfo.isLoggedIn){
-            this.setState({password: this.props.userInfo.password.replace(/[a-z0-9]/gi, "*")})
+        if(this.props.userInfo.profile.isLoggedIn){
+            this.setState({password: this.props.userInfo.profile.password.replace(/[a-z0-9]/gi, "*")})
         } else {
             null
         }
-        if(this.props.userInfo.password){
-            let password = this.props.userInfo.password
+        if(this.props.userInfo.profile.password){
+            let password = this.props.userInfo.profile.password
             let newPassword = password.replace(/[a-z0-9]/gi, "*")
             this.setState({password: newPassword})
         } else {
@@ -66,11 +66,11 @@ class ProfileComponent extends Component {
     handlePassword = () => {
         if(this.state.password.includes("*")){
             this.setState({
-                password: this.props.userInfo.password
+                password: this.props.userInfo.profile.password
             })
         } else {
             this.setState({
-                password: this.props.userInfo.password.replace(/[a-z0-9]/gi, "*")
+                password: this.props.userInfo.profile.password.replace(/[a-z0-9]/gi, "*")
             })
         }
     }
@@ -78,7 +78,7 @@ class ProfileComponent extends Component {
     render(){
         return (
                 <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
-                    {this.props.userInfo.isLoggedIn ? 
+                    {this.props.userInfo.profile.isLoggedIn ? 
                     <View style={styles.container}>
                         <Button onPress={() => {
                             this.setState({isLoggedIn: false})
@@ -102,11 +102,11 @@ class ProfileComponent extends Component {
                             </View>
                             <Button onPress={() => this.pickImage()} title="+" buttonStyle={styles.addImage}/>
                             <View style={styles.nameContainer}>
-                                <Text h4 style={styles.firstName}>{this.props.userInfo.firstName}</Text>
-                                <Text h4 style={styles.lastName}>{this.props.userInfo.lastName}</Text>
+                                <Text h4 style={styles.firstName}>{this.props.userInfo.profile.firstName}</Text>
+                                <Text h4 style={styles.lastName}>{this.props.userInfo.profile.lastName}</Text>
                             </View>
                             <View style={styles.userContainer}>
-                                <Text style={{fontSize: 15}}>Username: <Text style={styles.text}>{this.props.userInfo.username}</Text></Text>
+                                <Text style={{fontSize: 15}}>Username: <Text style={styles.text}>{this.props.userInfo.profile.username}</Text></Text>
                                 <View style={styles.passContainer}>
                                     <Text style={styles.password}>Password: <Text style={styles.text}>{this.state.password}</Text></Text>
                                     {this.state.password.includes("*") ? <Button buttonStyle={styles.passwordButton} title="Show password" onPress={this.handlePassword} /> : <Button buttonStyle={styles.passwordButton} title="Hide password" onPress={this.handlePassword} />}
