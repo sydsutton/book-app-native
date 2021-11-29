@@ -113,7 +113,6 @@ class HomeComponent extends Component {
     }
 
     render(){
-        console.log(this.props.books.length)
         const {search} = this.state
 
         return (
@@ -266,6 +265,9 @@ class HomeComponent extends Component {
                                                     iconRight
                                                     buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
                                                     title="Save"
+                                                    onPress={() => {
+                                                        this.props.saveBook(book)
+                                                    }}
                                                 />
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 

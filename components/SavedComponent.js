@@ -1,60 +1,68 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
 import { Card, Avatar, Button, Icon } from "react-native-elements"
+import { connect } from "react-redux"
+import { deleteBook } from "../redux/ActionCreators"
+
+const mapStateToProps = state => {
+    return {
+        books: state.save.books
+    }
+}
+
+const mapDispatchToProps = {
+    deleteBook
+}
 
 class SavedComponent extends Component {
     render(){
-        // const {books} = this.props
-        
-        // const renderSaved = ({item}) => {
-        //     return(
-        //         <View>
-        //             <Card containerStyle={styles.card}>
-        //                 <View style={styles.avatarContainer}>
-        //                     <Avatar 
-        //                         source={item.imageLink}
-        //                         size="large"
-        //                         icon={{name: 'user', type: 'font-awesome'}}
-        //                     />
-        //                     <View style={styles.textContainer}>
-        //                         <Text style={styles.title}>{item.title}</Text>
-        //                         <Text>By {item.author}</Text>
-        //                     </View>
-        //                 </View>
-        //                 <View style={styles.buttonContainer}>
-        //                     <Button 
-        //                         buttonStyle={styles.removeButton}
-        //                         title="   Remove book"
-        //                         titleStyle={{fontSize: 12}}
-        //                         icon={<Icon name="minus" color="#fff" size={12} type="font-awesome"/>}
-        //                     />
-        //                     <Button 
-        //                         buttonStyle={styles.readButton}
-        //                         icon={<Icon name="arrow-right" color="#fff" size={12} type="font-awesome"/>}
-        //                         title="   I've read it"
-        //                         titleStyle={{fontSize: 12}}
-        //                     />
-        //                 </View>
-        //             </Card>
-        //         </View>
-        //     )
-        // }
+        const renderSaved = ({item}) => {
+            return(
+                <View>
+                    <Card containerStyle={styles.card}>
+                        <View style={styles.avatarContainer}>
+                            <Avatar 
+                                source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
+                                size="large"
+                                icon={{name: 'user', type: 'font-awesome'}}
+                            />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.title}>{item.title}</Text>
+                                {/* <Text>By {item.author}</Text> */}
+                            </View>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <Button 
+                                buttonStyle={styles.removeButton}
+                                title="   Remove book"
+                                titleStyle={{fontSize: 12}}
+                                icon={<Icon name="minus" color="#fff" size={12} type="font-awesome"/>}
+                                onPress={() => this.props.deleteBook(item)}
+                            />
+                            <Button 
+                                buttonStyle={styles.readButton}
+                                icon={<Icon name="arrow-right" color="#fff" size={12} type="font-awesome"/>}
+                                title="   I've read it"
+                                titleStyle={{fontSize: 12}}
+                            />
+                        </View>
+                    </Card>
+                </View>
+            )
+        }
         return (
             <ImageBackground source={require("../images/backgroundImage.jpg")} style={{flex: 1, resizeMode: "cover"}}>
                 <View style={styles.container}>
-                    <Text>Saved</Text>
-                    {/* <FlatList
-                        data={books}
+                    <FlatList
+                        data={this.props.books}
                         renderItem={renderSaved}
                         keyExtractor={(item, index) => 'key'+index}
-                    /> */}
+                    />
                 </View>
             </ImageBackground>
         );
     }
 }
-
-export default SavedComponent
 
 const styles = StyleSheet.create({
     container: {
@@ -102,3 +110,5 @@ const styles = StyleSheet.create({
         paddingRight: 15
     }
 })
+
+export default connect(mapStateToProps, mapDispatchToProps)(SavedComponent)

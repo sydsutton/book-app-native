@@ -9,3 +9,8 @@ export const saveBook = book => ({
     type: ActionTypes.SAVE_BOOK,
     payload: book
 })
+
+export const deleteBook = book => ({
+    type: ActionTypes.DELETE_BOOK,
+    payload: book
+})
