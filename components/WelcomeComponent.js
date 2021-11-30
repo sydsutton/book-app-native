@@ -83,7 +83,6 @@ class WelcomeComponent extends Component {
     }
 
     render(){
-        console.log(this.props.userInfo.profile.profile)
         const { isLoginOpen, isCreateOpen, firstName, lastName, email, username, password, confirmPassword, loginUsername, loginPassword, isLoggedIn, errorMessage } = this.state
         return (
             <ImageBackground source={require("../images/coverImage.jpg")} style={styles.image}> 

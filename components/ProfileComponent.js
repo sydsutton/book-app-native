@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import {View, ImageBackground, StyleSheet, FlatList, ScrollView } from "react-native"
+import {View, ImageBackground, StyleSheet, FlatList, ScrollView, TouchableOpacity } from "react-native"
 import { Button, Image, Text, Card, Icon } from "react-native-elements"
 import { connect } from "react-redux"
 import * as ImagePicker from 'expo-image-picker'
 import Welcome from "./WelcomeComponent"
 import { saveProfile } from "../redux/ActionCreators"
+
 
 const mapStateToProps = state => {
     return {
@@ -23,7 +24,10 @@ class ProfileComponent extends Component {
         this.state = {
             password: "",
             image: "",
-            isLoggedIn: this.props.userInfo.profile.isLoggedIn 
+            isLoggedIn: this.props.userInfo.profile.isLoggedIn,
+            bookInfo: {
+                title: ""
+            }
         }
     }
 
@@ -37,11 +41,11 @@ class ProfileComponent extends Component {
             }
           }
         )
-        if(this.props.userInfo.profile.isLoggedIn){
-            this.setState({password: this.props.userInfo.profile.password.replace(/[a-z0-9]/gi, "*")})
-        } else {
-            null
-        }
+        // if(this.props.userInfo.profile.isLoggedIn){
+        //     this.setState({password: this.props.userInfo.profile.password.replace(/[a-z0-9]/gi, "*")})
+        // } else {
+        //     null
+        // }
         if(this.props.userInfo.profile.password){
             let password = this.props.userInfo.profile.password
             let newPassword = password.replace(/[a-z0-9]/gi, "*")
@@ -77,17 +81,19 @@ class ProfileComponent extends Component {
     }
 
     render(){
-        const renderRead = ({item}) => {
-            return(
-                <View>
-                    <Image 
-                        source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
-                        style={{height: 300, width: 150}}
-                        alt={item.title} 
-                    /> 
-                </View>
-            )
-        }
+        // const renderRead = ({item}) => {
+        //     return(
+        //         <View>
+        //             <TouchableOpacity onPress={() => this.setState({bookInfo: {title: item.title}})}>
+        //                 <Image 
+        //                     source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
+        //                     style={{height: 300, width: 75, margin: 2, borderRadius: 8}}
+        //                     alt={item.title} 
+        //                 /> 
+        //             </TouchableOpacity>
+        //         </View>
+        //     )
+        // }
         return (
                 <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
                     {!this.props.userInfo.profile.isLoggedIn ? 
@@ -128,12 +134,40 @@ class ProfileComponent extends Component {
                                     </View>
                                 </View>
                             </Card>
-                            <FlatList
-                                horizontal
-                                data={this.props.readBooks}
-                                renderItem={renderRead}
-                                keyExtractor={(item, index) => 'key'+index}
-                            />
+                            <Text style={{fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 20}}>Your Shelf</Text>
+                            {this.state.bookInfo.title ? 
+                                <Card>
+                                    <Text>{this.state.bookInfo.title}</Text>
+                                </Card>
+                            : null
+                            }
+                            <View style={{width: "80%", flex: 1, flexWrap: "wrap", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                                {this.props.readBooks.map(item => {
+                                    return(
+                                        <View>
+                                            {item.cover_edition_key ? 
+                                            <Image 
+                                                source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
+                                                style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                alt={item.title} 
+                                            /> 
+                                            : 
+                                            <Image 
+                                                source={{uri: `https://images.squarespace-cdn.com/content/v1/539dffebe4b080549e5a5df5/1556136681564-1HI5D6ITPKFKRETHU38X/Bronte-Jane-Eyre-book-spine-wall-art-museum-outlets.jpg?format=300w`}}
+                                                style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                alt={item.title} 
+                                            /> 
+                                            }
+                                        </View>
+                                    )
+                                })}
+                                {/* <FlatList
+                                    horizontal
+                                    data={this.props.readBooks}
+                                    renderItem={renderRead}
+                                    keyExtractor={(item, index) => 'key'+index}
+                                /> */}
+                            </View>
                         </View>
                     </ScrollView>
                     }
@@ -219,17 +253,3 @@ const styles = StyleSheet.create({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileComponent)
-
-                    // <Card containerStyle={styles.card}>
-                    //     <View style={styles.imageContainer}>
-                    //         <Image style={styles.image} 
-                    //             source={{uri: `https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png`}} 
-                    //         />
-                    //     </View>
-                    //     <View style={styles.nameContainer}>
-                    //         <Text h4 style={styles.noUser}>No user data</Text>
-                    //     </View>
-                    //     <View style={styles.userContainer}>
-                            
-                    //     </View>
-                    // </Card>

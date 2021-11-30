@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ImageBackground, FlatList, Image, ScrollView, Animated } from "react-native"
+import { View, Text, StyleSheet, ImageBackground, FlatList, Image, ScrollView } from "react-native"
 import { Card, Avatar, Button, Icon } from "react-native-elements"
 import { connect } from "react-redux"
 import { deleteBook } from "../redux/ActionCreators"
 import { readBook } from "../redux/ActionCreators"
-import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -21,7 +20,7 @@ const mapDispatchToProps = {
 
 class SavedComponent extends Component {
     render(){
-        const renderSaved = ({item, index}) => {
+        const renderSaved = ({item}) => {
             return(
                 <View>
                     <Card containerStyle={styles.card}>
@@ -62,12 +61,15 @@ class SavedComponent extends Component {
         return (
             <ImageBackground source={require("../images/backgroundImage.jpg")} style={{flex: 1, resizeMode: "cover"}}>
                 <View style={styles.container}>
-                    {this.props.user.isLoggedIn ? 
-                    <FlatList
-                        data={this.props.books}
-                        renderItem={renderSaved}
-                        keyExtractor={(item, index) => 'key'+index}
-                    />
+                    {this.props.user.isLoggedIn && this.props.books.length > 0 ? 
+                         <FlatList
+                            data={this.props.books}
+                            renderItem={renderSaved}
+                            keyExtractor={(item, index) => 'key'+index}
+                        />
+                    :
+                    this.props.user.isLoggedIn && this.props.books.length === 0 ? 
+                    <Text>You don't currently have any saved books </Text>
                     : 
                     <Text>Please log in to see your saved books</Text>
                     }
