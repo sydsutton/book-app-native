@@ -6,4 +6,6 @@ export const DELETE_BOOK = 'DELETE_BOOK'
 
 export const READ_BOOK = 'READ_BOOK'
 
+export const DELETE_READ_BOOK = 'DELETE_READ_BOOK'
+
 

@@ -269,7 +269,7 @@ class HomeComponent extends Component {
                             {this.state.searchData ? this.state.searchData.map(book => {
                                 return (
                                     <View key={book.cover_edition_key}>
-                                        <Card containerStyle={styles.searchCardContainer}>
+                                        <Card key={book.cover_edition_key} containerStyle={styles.searchCardContainer}>
                                             <Image 
                                                 source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
                                                 style={styles.searchCardImage}

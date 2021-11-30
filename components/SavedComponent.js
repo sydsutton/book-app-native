@@ -20,6 +20,7 @@ const mapDispatchToProps = {
 
 class SavedComponent extends Component {
     render(){
+        console.log(this.props.readBooks.length)
         const renderSaved = ({item}) => {
             return(
                 <View>
@@ -83,7 +84,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginTop: 50
     },
     card: {
         backgroundColor: "rgba(255,255,255,0.5)", 

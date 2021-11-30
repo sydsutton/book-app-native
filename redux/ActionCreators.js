@@ -19,3 +19,8 @@ export const readBook = book => ({
     type: ActionTypes.READ_BOOK,
     payload: book
 })
+
+export const deleteReadBook = book => ({
+    type: ActionTypes.DELETE_READ_BOOK,
+    payload: book
+})

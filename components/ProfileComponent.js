@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {View, ImageBackground, StyleSheet, FlatList, ScrollView, TouchableOpacity } from "react-native"
-import { Button, Image, Text, Card, Icon } from "react-native-elements"
+import { Button, Image, Text, Card, Icon, Tooltip } from "react-native-elements"
 import { connect } from "react-redux"
 import * as ImagePicker from 'expo-image-picker'
 import Welcome from "./WelcomeComponent"
 import { saveProfile } from "../redux/ActionCreators"
+import {deleteReadBook } from "../redux/ActionCreators"
+import { interpolateNode } from 'react-native-reanimated';
 
 
 const mapStateToProps = state => {
@@ -15,7 +17,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    saveProfile: (userInfo) => saveProfile(userInfo)
+    saveProfile: (userInfo) => saveProfile(userInfo),
+    deleteReadBook: (book) => deleteReadBook(book)
 }
 
 class ProfileComponent extends Component {
@@ -25,9 +28,6 @@ class ProfileComponent extends Component {
             password: "",
             image: "",
             isLoggedIn: this.props.userInfo.profile.isLoggedIn,
-            bookInfo: {
-                title: ""
-            }
         }
     }
 
@@ -135,28 +135,48 @@ class ProfileComponent extends Component {
                                 </View>
                             </Card>
                             <Text style={{fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 20}}>Your Shelf</Text>
-                            {this.state.bookInfo.title ? 
-                                <Card>
-                                    <Text>{this.state.bookInfo.title}</Text>
-                                </Card>
-                            : null
-                            }
-                            <View style={{width: "80%", flex: 1, flexWrap: "wrap", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                            <View style={styles.shelf}>
                                 {this.props.readBooks.map(item => {
+                                    console.log(item.author_name ? item.author_name : item.authors[0].name)
                                     return(
-                                        <View>
+                                        <View key={item.cover_edition_key}>
                                             {item.cover_edition_key ? 
-                                            <Image 
-                                                source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
-                                                style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
-                                                alt={item.title} 
-                                            /> 
+                                            <Tooltip 
+                                                popover={
+                                                <View>
+                                                    <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
+                                                    <Text>By: {item.author_name ? item.author_name : item.authors[0].name}</Text>
+                                                    <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
+                                                </View>
+                                                }
+                                                backgroundColor={"white"}
+                                                containerStyle={{borderWidth: 1, borderColor: "black"}}
+                                                height={200}
+                                            >
+                                                <Image 
+                                                    source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
+                                                    style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                    alt={item.title} 
+                                                /> 
+                                            </Tooltip>
                                             : 
-                                            <Image 
-                                                source={{uri: `https://images.squarespace-cdn.com/content/v1/539dffebe4b080549e5a5df5/1556136681564-1HI5D6ITPKFKRETHU38X/Bronte-Jane-Eyre-book-spine-wall-art-museum-outlets.jpg?format=300w`}}
-                                                style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
-                                                alt={item.title} 
-                                            /> 
+                                            <Tooltip 
+                                                popover={
+                                                <View>
+                                                    <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
+                                                    <Text>By: {item.author_name ? item.author_name : item.authors[0].name}</Text>
+                                                </View>
+                                                }
+                                                backgroundColor={"white"}
+                                                containerStyle={{borderWidth: 1, borderColor: "black"}}
+                                                height={120}
+                                            >
+                                                <Image 
+                                                    source={{uri: `https://images.squarespace-cdn.com/content/v1/539dffebe4b080549e5a5df5/1556136681564-1HI5D6ITPKFKRETHU38X/Bronte-Jane-Eyre-book-spine-wall-art-museum-outlets.jpg?format=300w`}}
+                                                    style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                    alt={item.title} 
+                                                /> 
+                                            </Tooltip>
                                             }
                                         </View>
                                     )
@@ -189,7 +209,7 @@ const styles = StyleSheet.create({
         justifyContent: "center", 
         borderRadius: 30, 
         marginTop: 100,
-        width: "80%"
+        width: "90%"
     },
     imageContainer: {
         position: "absolute", 
@@ -249,6 +269,18 @@ const styles = StyleSheet.create({
         fontWeight: "bold", 
         alignSelf: "center", 
         marginTop: 70
+    },
+    shelf: {
+        width: "90%", 
+        flex: 1, 
+        flexWrap: "wrap", 
+        flexDirection: "row", 
+        justifyContent: "center", 
+        alignItems: "center",
+        borderWidth: 20,
+        borderColor: "#51433D",
+        backgroundColor: "#746864",
+        minHeight: 350
     }
 })
 
