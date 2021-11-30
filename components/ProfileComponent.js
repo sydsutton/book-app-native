@@ -90,8 +90,10 @@ class ProfileComponent extends Component {
         }
         return (
                 <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
+                    {!this.props.userInfo.profile.isLoggedIn ? 
+                    <Welcome />
+                    :
                     <ScrollView>
-                        {this.props.userInfo.profile.isLoggedIn ? 
                         <View style={styles.container}>
                             <Button onPress={() => {
                                 this.setState({isLoggedIn: false})
@@ -133,10 +135,8 @@ class ProfileComponent extends Component {
                                 keyExtractor={(item, index) => 'key'+index}
                             />
                         </View>
-                        : 
-                        <Welcome />
-                        }
                     </ScrollView>
+                    }
                 </ImageBackground>
         )
     }
@@ -144,11 +144,11 @@ class ProfileComponent extends Component {
 
 const styles = StyleSheet.create({
     imageBackground: {
-        resizeMode: "cover", 
-        flex: 1
+        flex: 1,
+        resizeMode: "cover"
     },
     container: {
-        flex: 1, 
+        flex: 1,
         alignItems: "center"
     },
     card: {
