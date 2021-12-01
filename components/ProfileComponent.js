@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import {View, ImageBackground, StyleSheet, FlatList, ScrollView, TouchableOpacity } from "react-native"
-import { Button, Image, Text, Card, Icon, Tooltip } from "react-native-elements"
+import {View, ImageBackground, StyleSheet, ScrollView } from "react-native"
+import { Button, Image, Text, Card, Icon } from "react-native-elements"
 import { connect } from "react-redux"
 import * as ImagePicker from 'expo-image-picker'
 import Welcome from "./WelcomeComponent"
 import { saveProfile } from "../redux/ActionCreators"
 import {deleteReadBook } from "../redux/ActionCreators"
-import { interpolateNode } from 'react-native-reanimated';
+import Tooltip from 'rn-tooltip';
+
 
 
 const mapStateToProps = state => {
@@ -41,11 +42,6 @@ class ProfileComponent extends Component {
             }
           }
         )
-        // if(this.props.userInfo.profile.isLoggedIn){
-        //     this.setState({password: this.props.userInfo.profile.password.replace(/[a-z0-9]/gi, "*")})
-        // } else {
-        //     null
-        // }
         if(this.props.userInfo.profile.password){
             let password = this.props.userInfo.profile.password
             let newPassword = password.replace(/[a-z0-9]/gi, "*")
@@ -79,21 +75,10 @@ class ProfileComponent extends Component {
             })
         }
     }
+    
 
     render(){
-        // const renderRead = ({item}) => {
-        //     return(
-        //         <View>
-        //             <TouchableOpacity onPress={() => this.setState({bookInfo: {title: item.title}})}>
-        //                 <Image 
-        //                     source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
-        //                     style={{height: 300, width: 75, margin: 2, borderRadius: 8}}
-        //                     alt={item.title} 
-        //                 /> 
-        //             </TouchableOpacity>
-        //         </View>
-        //     )
-        // }
+
         return (
                 <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
                     {!this.props.userInfo.profile.isLoggedIn ? 
@@ -137,56 +122,50 @@ class ProfileComponent extends Component {
                             <Text style={{fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 20}}>Your Shelf</Text>
                             <View style={styles.shelf}>
                                 {this.props.readBooks.map(item => {
-                                    console.log(item.author_name ? item.author_name : item.authors[0].name)
                                     return(
                                         <View key={item.cover_edition_key}>
                                             {item.cover_edition_key ? 
-                                            <Tooltip 
-                                                popover={
-                                                <View>
-                                                    <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
-                                                    <Text>By: {item.author_name ? item.author_name : item.authors[0].name}</Text>
-                                                    <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
-                                                </View>
-                                                }
-                                                backgroundColor={"white"}
-                                                containerStyle={{borderWidth: 1, borderColor: "black"}}
-                                                height={200}
-                                            >
-                                                <Image 
-                                                    source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
-                                                    style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
-                                                    alt={item.title} 
-                                                /> 
-                                            </Tooltip>
+                                                <Tooltip 
+                                                    popover={
+                                                        <View>
+                                                            <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
+                                                            <Text>By: {item.author_name ? item.author_name[0] : item.authors[0].name}</Text>
+                                                            <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
+                                                        </View>
+                                                    }
+                                                    backgroundColor={"white"}
+                                                    height={150}
+                                                    overlayColor={"rgba(0,0,0,.6)"}
+                                                >
+                                                    <Image 
+                                                        source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
+                                                        style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                        alt={item.title} 
+                                                    /> 
+                                                </Tooltip>
                                             : 
-                                            <Tooltip 
-                                                popover={
-                                                <View>
-                                                    <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
-                                                    <Text>By: {item.author_name ? item.author_name : item.authors[0].name}</Text>
-                                                </View>
-                                                }
-                                                backgroundColor={"white"}
-                                                containerStyle={{borderWidth: 1, borderColor: "black"}}
-                                                height={120}
-                                            >
-                                                <Image 
-                                                    source={{uri: `https://images.squarespace-cdn.com/content/v1/539dffebe4b080549e5a5df5/1556136681564-1HI5D6ITPKFKRETHU38X/Bronte-Jane-Eyre-book-spine-wall-art-museum-outlets.jpg?format=300w`}}
-                                                    style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
-                                                    alt={item.title} 
-                                                /> 
-                                            </Tooltip>
+                                                <Tooltip 
+                                                    popover={
+                                                        <View>
+                                                            <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
+                                                            <Text>By: {item.author_name ? item.author_name[0] : item.authors[0].name}</Text>
+                                                            <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
+                                                        </View>
+                                                    }
+                                                    backgroundColor={"white"}
+                                                    height={150}
+                                                    overlayColor={"rgba(0,0,0,.6)"}
+                                                >
+                                                    <Image 
+                                                        source={{uri: `https://images.squarespace-cdn.com/content/v1/539dffebe4b080549e5a5df5/1556136681564-1HI5D6ITPKFKRETHU38X/Bronte-Jane-Eyre-book-spine-wall-art-museum-outlets.jpg?format=300w`}}
+                                                        style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                        alt={item.title} 
+                                                    /> 
+                                                </Tooltip>
                                             }
                                         </View>
                                     )
                                 })}
-                                {/* <FlatList
-                                    horizontal
-                                    data={this.props.readBooks}
-                                    renderItem={renderRead}
-                                    keyExtractor={(item, index) => 'key'+index}
-                                /> */}
                             </View>
                         </View>
                     </ScrollView>
@@ -214,7 +193,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         position: "absolute", 
         bottom: 160, 
-        left: 61, 
+        left: 80, 
         top:-95
     },
     image: {

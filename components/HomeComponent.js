@@ -160,8 +160,8 @@ class HomeComponent extends Component {
                         <ScrollView horizontal style={{height: 600}}>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
-                                    <View key={book.cover_edition_key}>
-                                        <Card containerStyle={styles.card}>
+                                    <View>
+                                        <Card key={book.cover_edition_key} containerStyle={styles.card}>
                                             <Image 
                                                 source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
                                                 style={styles.cardImage}
@@ -268,7 +268,7 @@ class HomeComponent extends Component {
                             }) : null}
                             {this.state.searchData ? this.state.searchData.map(book => {
                                 return (
-                                    <View key={book.cover_edition_key}>
+                                    <View>
                                         <Card key={book.cover_edition_key} containerStyle={styles.searchCardContainer}>
                                             <Image 
                                                 source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
