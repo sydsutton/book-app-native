@@ -4,6 +4,7 @@ import { Card, Avatar, Button, Icon } from "react-native-elements"
 import { connect } from "react-redux"
 import { deleteBook } from "../redux/ActionCreators"
 import { readBook } from "../redux/ActionCreators"
+import moment from 'moment'
 
 const mapStateToProps = state => {
     return {
@@ -20,7 +21,10 @@ const mapDispatchToProps = {
 
 class SavedComponent extends Component {
     render(){
-        console.log(this.props.readBooks.length)
+        const date = moment()
+        .utcOffset('+05:30')
+        .format('YYYY-MM-DD hh:mm:ss a')
+
         const renderSaved = ({item}) => {
             return(
                 <View>
@@ -33,7 +37,8 @@ class SavedComponent extends Component {
                             />
                             <View style={styles.textContainer}>
                                 <Text style={styles.title}>{item.title}</Text>
-                                {/* <Text>By {item.author}</Text> */}
+                                <Text>By: {item.author_name ? item.author_name[0] : item.authors[0].name}</Text>
+                                <Text>Saved on {date}</Text>
                             </View>
                         </View>
                         <View style={styles.buttonContainer}>

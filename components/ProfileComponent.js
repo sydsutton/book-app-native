@@ -33,15 +33,6 @@ class ProfileComponent extends Component {
     }
 
     componentDidMount(){
-        (async () => {
-            if (Platform.OS !== 'web') {
-              const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-              if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-              }
-            }
-          }
-        )
         if(this.props.userInfo.profile.password){
             let password = this.props.userInfo.profile.password
             let newPassword = password.replace(/[a-z0-9]/gi, "*")

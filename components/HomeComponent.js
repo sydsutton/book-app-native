@@ -8,6 +8,7 @@ import { Card, Button, Icon, Text, SearchBar } from "react-native-elements"
 import GENRES from "../booksData/GENRES"
 import { connect } from "react-redux"
 import { saveBook } from "../redux/ActionCreators"
+import { deleteBook } from "../redux/ActionCreators"
 
 const mapStateToProps = state => {
     return {
@@ -18,7 +19,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    saveBook
+    saveBook,
+    deleteBook
 }
 
 class HomeComponent extends Component {
@@ -160,8 +162,8 @@ class HomeComponent extends Component {
                         <ScrollView horizontal style={{height: 600}}>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
                                 return (
-                                    <View>
-                                        <Card key={book.cover_edition_key} containerStyle={styles.card}>
+                                    <View key={book.key}>
+                                        <Card containerStyle={styles.card}>
                                             <Image 
                                                 source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
                                                 style={styles.cardImage}
@@ -172,6 +174,7 @@ class HomeComponent extends Component {
                                             <View style={{alignItems: "center", marginTop: 10}}>
                                                 {!this.props.user.isLoggedIn ? 
                                                     <Button 
+                                                        disabled={true}
                                                         iconRight
                                                         buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
                                                         title="Login in to save"
@@ -184,7 +187,8 @@ class HomeComponent extends Component {
                                                             icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
                                                             buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
-                                                            title="saved"
+                                                            title="Saved"
+                                                            // onPress={() => this.props.deleteBook(book)}
                                                         />
                                                         :
                                                     this.props.readBooks.includes(book) ? 
@@ -213,7 +217,6 @@ class HomeComponent extends Component {
                                                     title="More Info"
                                                     onPress={() => {
                                                         this.getDescription(book.key)
-                                                        // this.toggleSubjectModal()
                                                     }}
                                                 />
                                             </View>
@@ -231,7 +234,9 @@ class HomeComponent extends Component {
                                                     <ScrollView horizontal>
                                                         {this.state.bookDescription.covers ? this.state.bookDescription.covers.map(cover => {
                                                             return (
-                                                                <Image key={cover} style={styles.descriptionImage} source={{uri: `https://covers.openlibrary.org/b/id/${cover}-M.jpg`}} />
+                                                                <View key={cover}>
+                                                                    <Image key={cover} style={styles.descriptionImage} source={{uri: `https://covers.openlibrary.org/b/id/${cover}-M.jpg`}} />
+                                                                </View>
                                                             )
                                                         }) : null}
                                                     </ScrollView>
@@ -268,8 +273,8 @@ class HomeComponent extends Component {
                             }) : null}
                             {this.state.searchData ? this.state.searchData.map(book => {
                                 return (
-                                    <View>
-                                        <Card key={book.cover_edition_key} containerStyle={styles.searchCardContainer}>
+                                    <View key={book.key}>
+                                        <Card containerStyle={styles.searchCardContainer}>
                                             <Image 
                                                 source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
                                                 style={styles.searchCardImage}
@@ -281,6 +286,7 @@ class HomeComponent extends Component {
                                             <View style={{alignItems: "center", marginTop: 10}}>
                                             {!this.props.user.isLoggedIn ? 
                                                     <Button 
+                                                        disabled={true}
                                                         iconRight
                                                         buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
                                                         title="Login in to save"
@@ -293,7 +299,8 @@ class HomeComponent extends Component {
                                                             icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
                                                             buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
-                                                            title="saved"
+                                                            title="Saved"
+                                                            // onPress={() => this.props.deleteBook(book)}
                                                         />
                                                         :
                                                     this.props.readBooks.includes(book) ? 
@@ -322,7 +329,6 @@ class HomeComponent extends Component {
                                                     title="More Info"
                                                     onPress={() => {
                                                         this.getDescription(book.key)
-                                                        // this.toggleTitleModal()
                                                     }}
                                                 />
                                             </View>
@@ -340,7 +346,9 @@ class HomeComponent extends Component {
                                                     <ScrollView horizontal>
                                                         {this.state.bookDescription.covers ? this.state.bookDescription.covers.map(cover => {
                                                             return (
-                                                                <Image key={cover} style={{height:200, width:150, resizeMode: "cover"}} source={{uri: `https://covers.openlibrary.org/b/id/${cover}-M.jpg`}} />
+                                                                <View key={cover}>
+                                                                    <Image style={{height:200, width:150, resizeMode: "cover"}} source={{uri: `https://covers.openlibrary.org/b/id/${cover}-M.jpg`}} />
+                                                                </View>
                                                             )
                                                         }) : null}
                                                     </ScrollView>
