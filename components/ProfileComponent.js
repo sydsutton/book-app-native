@@ -114,13 +114,20 @@ class ProfileComponent extends Component {
                             <View style={styles.shelf}>
                                 {this.props.readBooks.map(item => {
                                     return(
-                                        <View key={item.cover_edition_key}>
+                                        <View key={item.key}>
                                             {item.cover_edition_key ? 
                                                 <Tooltip 
                                                     popover={
                                                         <View>
                                                             <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
-                                                            <Text>By: {item.author_name ? item.author_name[0] : item.authors[0].name}</Text>
+                                                            {item.author_name ? 
+                                                                <Text>By {item.author_name}</Text>
+                                                            : 
+                                                            item.authors ? 
+                                                                <Text>By {item.authors[0].name}</Text>
+                                                            :
+                                                                <Text>By Unknown</Text>
+                                                            }
                                                             <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
                                                         </View>
                                                     }
@@ -139,7 +146,14 @@ class ProfileComponent extends Component {
                                                     popover={
                                                         <View>
                                                             <Text style={{fontWeight: "bold", fontSize: 15}}>{item.title}</Text>
-                                                            <Text>By: {item.author_name ? item.author_name[0] : item.authors[0].name}</Text>
+                                                            {item.author_name ? 
+                                                                <Text>By {item.author_name}</Text>
+                                                            : 
+                                                            item.authors ? 
+                                                                <Text>By {item.authors[0].name}</Text>
+                                                            :
+                                                                <Text>By Unknown</Text>
+                                                            }
                                                             <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
                                                         </View>
                                                     }

@@ -318,7 +318,6 @@ class HomeComponent extends Component {
                                                         <Button 
                                                             icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            raised
                                                             buttonStyle={styles.saveButton} 
                                                             title="Save"
                                                             onPress={() => {

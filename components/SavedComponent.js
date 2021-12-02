@@ -22,8 +22,7 @@ const mapDispatchToProps = {
 class SavedComponent extends Component {
     render(){
         const date = moment()
-        .utcOffset('+05:30')
-        .format('YYYY-MM-DD hh:mm:ss a')
+        .format('DD-MM-YY hh:mm a')
 
         const renderSaved = ({item}) => {
             return(
@@ -37,7 +36,14 @@ class SavedComponent extends Component {
                             />
                             <View style={styles.textContainer}>
                                 <Text style={styles.title}>{item.title}</Text>
-                                <Text>By: {item.author_name ? item.author_name[0] : item.authors[0].name}</Text>
+                                {item.author_name ? 
+                                    <Text>By {item.author_name}</Text>
+                                : 
+                                item.authors ? 
+                                    <Text>By {item.authors[0].name}</Text>
+                                :
+                                    <Text>By Unknown</Text>
+                                }
                                 <Text>Saved on {date}</Text>
                             </View>
                         </View>
