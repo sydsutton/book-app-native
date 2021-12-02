@@ -137,7 +137,7 @@ class HomeComponent extends Component {
                             <View style={styles.innerContainer}>
                                 <Picker
                                     style={styles.picker}
-                                    mode="dialog"
+                                    mode="dropdown"
                                     onValueChange={(itemValue) => this.handleChange(itemValue)}
                                     selectedValue={this.state.selectedBookType}
                                 >
@@ -176,7 +176,7 @@ class HomeComponent extends Component {
                                                     <Button 
                                                         disabled={true}
                                                         iconRight
-                                                        buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                        buttonStyle={styles.loginToSaveButton} 
                                                         title="Login in to save"
                                                     />
 
@@ -186,7 +186,7 @@ class HomeComponent extends Component {
                                                         <Button 
                                                             icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                            buttonStyle={styles.savedButton} 
                                                             title="Saved"
                                                             // onPress={() => this.props.deleteBook(book)}
                                                         />
@@ -196,14 +196,15 @@ class HomeComponent extends Component {
                                                         <Button 
                                                             icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "orange", textColor: "black"}} 
+                                                            buttonStyle={styles.readItButton} 
                                                             title="You've read it!"
                                                         />
                                                     :
                                                         <Button 
                                                             icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
+                                                            raised
+                                                            buttonStyle={styles.saveButton} 
                                                             title="Save"
                                                             onPress={() => {
                                                                 this.props.saveBook(book)
@@ -213,6 +214,7 @@ class HomeComponent extends Component {
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
                                                     iconRight
+                                                    raised
                                                     buttonStyle={{width: 200}} 
                                                     title="More Info"
                                                     onPress={() => {
@@ -287,8 +289,9 @@ class HomeComponent extends Component {
                                             {!this.props.user.isLoggedIn ? 
                                                     <Button 
                                                         disabled={true}
+                                                        disabledStyle={{backgroundColor: "#858984"}}
                                                         iconRight
-                                                        buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                        buttonStyle={styles.loginToSaveButton} 
                                                         title="Login in to save"
                                                     />
 
@@ -298,7 +301,7 @@ class HomeComponent extends Component {
                                                         <Button 
                                                             icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "green", textColor: "black"}} 
+                                                            buttonStyle={styles.savedButton} 
                                                             title="Saved"
                                                             // onPress={() => this.props.deleteBook(book)}
                                                         />
@@ -308,14 +311,15 @@ class HomeComponent extends Component {
                                                         <Button 
                                                             icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "orange", textColor: "black"}} 
+                                                            buttonStyle={styles.readItButton} 
                                                             title="You've read it!"
                                                         />
                                                     :
                                                         <Button 
                                                             icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={{marginBottom: 10, width: 200, backgroundColor: "#B23963", textColor: "black"}} 
+                                                            raised
+                                                            buttonStyle={styles.saveButton} 
                                                             title="Save"
                                                             onPress={() => {
                                                                 this.props.saveBook(book)
@@ -325,6 +329,7 @@ class HomeComponent extends Component {
                                                 <Button 
                                                     icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
                                                     iconRight
+                                                    raised
                                                     buttonStyle={{width: 200}} 
                                                     title="More Info"
                                                     onPress={() => {
@@ -417,12 +422,13 @@ const styles = StyleSheet.create({
         borderRadius: 30
     },
     searchButton: { 
-        width: 300, 
+        width: 200, 
         justifyContent: "center", 
         textAlign: "center", 
         alignSelf: "center", 
         borderRadius: 20, 
-        marginTop: 15
+        marginTop: 15,
+        backgroundColor: "#3899bc"
     },
     orText: {
         textAlign: "center", 
@@ -431,14 +437,16 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     outerContainer: {
+        flex: 1,
         justifyContent: "center", 
         alignItems: "center", 
-        marginTop: 10
+        marginTop: 10,
     },
     innerContainer: {
         backgroundColor: "white", 
         borderRadius: 20, 
-        height: 40
+        height: 50,
+        width: "50%"
     },
     picker: {
         height: 50,
@@ -509,6 +517,28 @@ const styles = StyleSheet.create({
         width: 150, 
         fontWeight: "bold", 
         fontSize: 18
+    },
+    loginToSaveButton: {
+        marginBottom: 10,
+        width: 200, 
+    },
+    savedButton: {
+        marginBottom: 10, 
+        width: 200, 
+        backgroundColor: "green", 
+        color: "black"
+    },
+    readItButton: {
+        marginBottom: 10, 
+        width: 200, 
+        backgroundColor: "orange", 
+        color: "black"
+    },
+    saveButton: {
+        marginBottom: 10, 
+        width: 200, 
+        backgroundColor: "#B23963", 
+        color: "black"
     }
 })
 
