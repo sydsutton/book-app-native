@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
         alignSelf: "center", 
         borderRadius: 20, 
         marginTop: 15,
-        backgroundColor: "#3899bc"
+        backgroundColor: "#4163BE"
     },
     orText: {
         textAlign: "center", 

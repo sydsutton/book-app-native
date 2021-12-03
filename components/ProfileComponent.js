@@ -83,7 +83,8 @@ class ProfileComponent extends Component {
                                 }} 
                                 buttonStyle={{marginLeft: 300, marginTop: 50, borderRadius: 8}}
                                 title=""
-                                icon={<Icon name="sign-out" type="font-awesome" color="white"  />} 
+                                type="clear"
+                                icon={<Icon name="sign-out" type="font-awesome" color="#699ec9"  />} 
                             />
                             <Card containerStyle={styles.card}>
                                 <View style={styles.imageContainer}>
@@ -193,7 +194,8 @@ const styles = StyleSheet.create({
         justifyContent: "center", 
         borderRadius: 30, 
         marginTop: 100,
-        width: "90%"
+        width: "90%",
+        backgroundColor: "rgba(255,255,255,.9)",
     },
     imageContainer: {
         position: "absolute", 
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
     image: {
         width: 160, 
         height: 160, 
-        borderRadius: 300
+        borderRadius: 300, 
     },
     nameContainer: {
         borderBottomWidth: 1, 

@@ -16,17 +16,20 @@ function MyTabs() {
                 let iconName;
     
                 if (route.name === 'Home') {
-                    iconName = focused ? 'house-user' : 'house-user';
+                    iconName = focused ? 'home' : 'home';
                 } else if (route.name === 'Saved') {
-                    iconName = focused ? 'book-open' : 'book-open';
+                    iconName = focused ? 'bookmark' : 'bookmark';
                 } else if (route.name === "Profile"){
-                    iconName = focused ? "user-circle" : "user-circle"
+                    iconName = focused ? "user" : "user"
                 } 
     
-                return <Icon name={iconName} size={size} color={color} type="font-awesome-5"/>;
+                return <Icon name={iconName} size={28} color={color} type="font-awesome"/>;
                 },
-                tabBarActiveTintColor: '#308CC1',
-                tabBarInactiveTintColor: 'gray',
+                tabBarActiveTintColor: '#4163BE',
+                tabBarInactiveTintColor: '#A0AAC3',
+                tabBarInactiveBackgroundColor: "rgba(0,0,0,.85)",
+                tabBarActiveBackgroundColor: "rgba(0,0,0,.85)",
+                tabBarLabel: () => {return null},
                 style: {
                     height: "10%"
                 }
