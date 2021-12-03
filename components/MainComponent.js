@@ -25,8 +25,8 @@ function MyTabs() {
     
                 return <Icon name={iconName} size={28} color={color} type="font-awesome"/>;
                 },
-                tabBarActiveTintColor: '#4163BE',
-                tabBarInactiveTintColor: '#A0AAC3',
+                tabBarActiveTintColor: '#2392e3',
+                tabBarInactiveTintColor: 'grey',
                 tabBarInactiveBackgroundColor: "rgba(0,0,0,.85)",
                 tabBarActiveBackgroundColor: "rgba(0,0,0,.85)",
                 tabBarLabel: () => {return null},

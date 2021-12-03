@@ -184,8 +184,9 @@ class HomeComponent extends Component {
 
                                                     this.props.user.isLoggedIn && this.props.books.includes(book) ? 
                                                         <Button 
-                                                            icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="black" type="font-awesome" />} 
                                                             iconRight
+                                                            titleStyle={{color: "black"}}
                                                             buttonStyle={styles.savedButton} 
                                                             title="Saved"
                                                             // onPress={() => this.props.deleteBook(book)}
@@ -212,10 +213,10 @@ class HomeComponent extends Component {
                                                         />
                                                 }
                                                 <Button 
-                                                    icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
+                                                    icon={<Icon name="info-circle" size={20} color={"white"} style={{marginLeft: 10}} type="font-awesome" />} 
                                                     iconRight
                                                     raised
-                                                    buttonStyle={{width: 200}} 
+                                                    buttonStyle={{width: 200, backgroundColor: "#2392E3"}} 
                                                     title="More Info"
                                                     onPress={() => {
                                                         this.getDescription(book.key)
@@ -326,10 +327,10 @@ class HomeComponent extends Component {
                                                         />
                                                 }
                                                 <Button 
-                                                    icon={<Icon name="info-circle" size={15} style={{marginLeft: 10}} type="font-awesome" />} 
+                                                    icon={<Icon name="info-circle" size={20} color={"white"} style={{marginLeft: 10}} type="font-awesome" />} 
                                                     iconRight
                                                     raised
-                                                    buttonStyle={{width: 200}} 
+                                                    buttonStyle={{width: 200, backgroundColor: "#988CFE"}} 
                                                     title="More Info"
                                                     onPress={() => {
                                                         this.getDescription(book.key)
@@ -427,7 +428,7 @@ const styles = StyleSheet.create({
         alignSelf: "center", 
         borderRadius: 20, 
         marginTop: 15,
-        backgroundColor: "#4163BE"
+        backgroundColor: "#2392e3"
     },
     orText: {
         textAlign: "center", 
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     card: {
-        backgroundColor: "(rgba(255,255,255,0.75)", 
+        backgroundColor: "white", 
         borderRadius: 20, 
         shadowColor: 'black',
         height: 550,
@@ -495,9 +496,9 @@ const styles = StyleSheet.create({
         resizeMode: "cover"
     },
     searchCardContainer: {
-        backgroundColor: "(rgba(255,255,255,0.75)", 
+        backgroundColor: "white", 
         borderRadius: 20, shadowColor: 'black',
-        height: 570,
+        height: 550,
         shadowOpacity: 0.26,
         shadowOffset: { width: 0, height: 2},
         shadowRadius: 10,
@@ -524,8 +525,7 @@ const styles = StyleSheet.create({
     savedButton: {
         marginBottom: 10, 
         width: 200, 
-        backgroundColor: "green", 
-        color: "black"
+        backgroundColor: "#CDEFAF",
     },
     readItButton: {
         marginBottom: 10, 
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
     saveButton: {
         marginBottom: 10, 
         width: 200, 
-        backgroundColor: "#B23963", 
+        backgroundColor: "#D1427D", 
         color: "black"
     }
 })
