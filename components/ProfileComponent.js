@@ -71,7 +71,7 @@ class ProfileComponent extends Component {
     render(){
 
         return (
-                <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
+                <ImageBackground source={require("../images/coverImage.jpg")} style={styles.imageBackground}>
                     {!this.props.userInfo.profile.isLoggedIn ? 
                     <Welcome />
                     :
@@ -111,7 +111,6 @@ class ProfileComponent extends Component {
                                     </View>
                                 </View>
                             </Card>
-                            <Text style={{fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 20}}>Your Shelf</Text>
                             <View style={styles.shelf}>
                                 {this.props.readBooks.map(item => {
                                     return(
@@ -138,7 +137,7 @@ class ProfileComponent extends Component {
                                                 >
                                                     <Image 
                                                         source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
-                                                        style={{height: 300, width: 65, margin: 2, borderRadius: 8}}
+                                                        style={styles.book}
                                                         alt={item.title} 
                                                     /> 
                                                 </Tooltip>
@@ -263,10 +262,22 @@ const styles = StyleSheet.create({
         flexDirection: "row", 
         justifyContent: "center", 
         alignItems: "center",
-        borderWidth: 20,
-        borderColor: "#51433D",
-        backgroundColor: "#746864",
-        minHeight: 350
+        marginTop: 30
+        // borderWidth: 20,
+        // borderColor: "#51433D",
+        // backgroundColor: "#746864",
+        // minHeight: 350
+    },
+    book: {
+        height: 300, 
+        width: 65, 
+        margin: 2, 
+        borderRadius: 8, 
+        shadowOpacity: 0.26, 
+        shadowOffset: { width: 0, height: 2}, 
+        shadowRadius: 10,
+        elevation: 3,
+        borderWidth: 0,
     }
 })
 

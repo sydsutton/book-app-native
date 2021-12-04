@@ -29,11 +29,19 @@ class SavedComponent extends Component {
                 <View>
                     <Card containerStyle={styles.card}>
                         <View style={styles.avatarContainer}>
+                            {item.cover_edition_key ? 
                             <Avatar 
                                 source={{uri: `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}.jpg`}}
                                 size="large"
                                 icon={{name: 'user', type: 'font-awesome'}}
                             />
+                            : 
+                            <Avatar 
+                                source={{uri: `https://cdn.pixabay.com/photo/2020/10/02/17/55/book-5621767_960_720.png`}}
+                                size="large"
+                                icon={{name: 'user', type: 'font-awesome'}}
+                            />
+                            }
                             <View style={styles.textContainer}>
                                 <Text style={styles.title}>{item.title}</Text>
                                 {item.author_name ? 
@@ -71,7 +79,7 @@ class SavedComponent extends Component {
             )
         }
         return (
-            <ImageBackground source={require("../images/backgroundImage.jpg")} style={{flex: 1, resizeMode: "cover"}}>
+            <ImageBackground source={require("../images/coverImage.jpg")} style={{flex: 1, resizeMode: "cover"}}>
                 <View style={styles.container}>
                     {this.props.user.isLoggedIn && this.props.books.length > 0 ? 
                          <FlatList
@@ -125,7 +133,7 @@ const styles = StyleSheet.create({
     },
     removeButton: {
         marginTop: 20, 
-        backgroundColor:"#CB2A2A", 
+        backgroundColor: "#D1427D", 
         borderRadius: 20, 
         paddingLeft: 15, 
         paddingRight: 15

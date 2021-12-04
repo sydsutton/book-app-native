@@ -69,7 +69,7 @@ class HomeComponent extends Component {
         } else {
             alert("Sorry, something went wrong")
         }
-        this.state.selectedBookType && !this.state.searchData ? this.toggleSubjectModal() : this.toggleTitleModal()  
+        // this.state.selectedBookType && !this.state.searchData ? this.toggleSubjectModal() : this.toggleTitleModal()  
     }
 
     updateSearch = (search) => {
@@ -160,7 +160,7 @@ class HomeComponent extends Component {
                         </View>
                         {this.state.isLoading ? 
                                 <View style={styles.loadingContainer}>
-                                    <ActivityIndicator size="large" color="white"/>
+                                    <ActivityIndicator size="large" color="rgba(0,0,0,.9)"/>
                                     <Text style={styles.loadingText}>Loading...</Text>
                                 </View> : null}
                         <ScrollView horizontal style={{height: 600}}>
@@ -187,7 +187,9 @@ class HomeComponent extends Component {
                                                         <View style={{flexDirection: "row"}}>
                                                             <Text style={styles.cardTitle}>{book.title}</Text>
                                                         </View>
-                                                        <Text style={styles.authorText}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                                        <View style={{flexDirection: "row"}}>
+                                                            <Text style={styles.authorText}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                                        </View>
                                                     </View>
                                                     <View style={{alignItems: "flex-start", marginTop: 10}}>
                                                         {!this.props.user.isLoggedIn ? 
@@ -237,6 +239,7 @@ class HomeComponent extends Component {
                                                             title="More Info"
                                                             onPress={() => {
                                                                 this.getDescription(book.key)
+                                                                this.toggleSubjectModal()
                                                             }}
                                                         />
                                                     </View>
@@ -313,8 +316,19 @@ class HomeComponent extends Component {
                                                 }  
                                                 <View style={{flexDirection: "column", justifyContent: "space-around", marginLeft: 10}}>
                                                     <View>
-                                                        <Text style={styles.searchCardTitle}>{book.title}</Text>
-                                                        <Text style={styles.authorText}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
+                                                        <View style={{flexDirection: "row"}}>
+                                                            <Text style={styles.cardTitle}>{book.title}</Text>
+                                                        </View>
+                                                        <View style={{flexDirection: "row"}}>
+                                                        {book.author_name ? 
+                                                            <Text style={styles.authorText}>By {book.author_name}</Text>
+                                                        : 
+                                                        book.authors ? 
+                                                            <Text style={styles.authorText}>By {book.authors[0].name}</Text>
+                                                        :
+                                                            <Text style={styles.authorText}>By Unknown</Text>
+                                                        }
+                                                        </View>
                                                         <Text style={styles.publishedText}>{book.first_publish_year ? `First published in ${book.first_publish_year}` : null}</Text>
                                                     </View>
                                                     <View style={{alignItems: "flex-start", marginTop: 10}}>
@@ -365,6 +379,7 @@ class HomeComponent extends Component {
                                                             title="More Info"
                                                             onPress={() => {
                                                                 this.getDescription(book.key)
+                                                                this.toggleTitleModal()
                                                             }}
                                                         />
                                                     </View>
@@ -522,7 +537,8 @@ const styles = StyleSheet.create({
     },
     authorText: {
         marginTop: 20, 
-        color: "rgba(0,0,0,.9)"
+        color: "rgba(0,0,0,.9)",
+        flex: 1
     },
     publishedText: {
         color: "rgba(0,0,0,.9)",
