@@ -9,6 +9,7 @@ import GENRES from "../booksData/GENRES"
 import { connect } from "react-redux"
 import { saveBook } from "../redux/ActionCreators"
 import { deleteBook } from "../redux/ActionCreators"
+import LinearGradient from 'react-native-linear-gradient'
 
 const mapStateToProps = state => {
     return {
@@ -120,7 +121,7 @@ class HomeComponent extends Component {
         const {search} = this.state
 
         return (
-            <ImageBackground source={require("../images/backgroundImage.jpg")} style={styles.imageBackground}>
+            <ImageBackground source={require("../images/coverImage.jpg")} style={styles.imageBackground}>
                 <View>
                     <ScrollView>
                         <SearchBar
@@ -131,7 +132,11 @@ class HomeComponent extends Component {
                             onChangeText={this.updateSearch}
                             value={search}
                         />
-                        <Button onPress={() => this.handleSearch(this.state.search)} buttonStyle={styles.searchButton} title="Search" />
+                        <Button 
+                            onPress={() => this.handleSearch(this.state.search)} 
+                            buttonStyle={styles.searchButton} 
+                            title="Search" 
+                        />
                         <Text style={styles.orText}>OR</Text>
                         <View style={styles.outerContainer}>
                             <View style={styles.innerContainer}>
@@ -156,72 +161,86 @@ class HomeComponent extends Component {
                         </View>
                         {this.state.isLoading ? 
                                 <View style={styles.loadingContainer}>
-                                    <ActivityIndicator size="large" color="#B23963"/>
+                                    <ActivityIndicator size="large" color="white"/>
                                     <Text style={styles.loadingText}>Loading...</Text>
                                 </View> : null}
                         <ScrollView horizontal style={{height: 600}}>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
+                                console.log(book)
                                 return (
                                     <View key={book.key}>
                                         <Card containerStyle={styles.card}>
-                                            <Image 
-                                                source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
-                                                style={styles.cardImage}
-                                                alt={book.title} 
-                                            /> 
-                                            <Text style={styles.cardTitle}>{book.title}</Text>
-                                            <Text style={{width: 150, marginTop: 20}}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
-                                            <View style={{alignItems: "center", marginTop: 10}}>
-                                                {!this.props.user.isLoggedIn ? 
-                                                    <Button 
-                                                        disabled={true}
-                                                        iconRight
-                                                        buttonStyle={styles.loginToSaveButton} 
-                                                        title="Login in to save"
-                                                    />
+                                            <View style={{flexDirection: "row"}}>
+                                                {book.cover_edition_key ? 
+                                                <Image 
+                                                    source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
+                                                    style={styles.cardImage}
+                                                    alt={book.title} 
+                                                /> 
+                                                :
+                                                <Image 
+                                                    source={{uri: `https://cdn.pixabay.com/photo/2020/10/02/17/55/book-5621767_960_720.png`}}
+                                                    style={styles.cardImage}
+                                                    alt={book.title} 
+                                                /> 
+                                                }
+                                                <View style={{flexDirection: "column", justifyContent: "space-around", marginLeft: 10}}>
+                                                    <View>
+                                                        <Text style={styles.cardTitle}>{book.title}</Text>
+                                                        <Text style={styles.authorText}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
+                                                    </View>
+                                                    <View style={{alignItems: "flex-start", marginTop: 10}}>
+                                                        {!this.props.user.isLoggedIn ? 
+                                                            <Button 
+                                                                disabled={true}
+                                                                iconRight
+                                                                buttonStyle={styles.loginToSaveButton} 
+                                                                title="Login in to save"
+                                                            />
 
-                                                    :
+                                                            :
 
-                                                    this.props.user.isLoggedIn && this.props.books.includes(book) ? 
-                                                        <Button 
-                                                            icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="black" type="font-awesome" />} 
-                                                            iconRight
-                                                            titleStyle={{color: "black"}}
-                                                            buttonStyle={styles.savedButton} 
-                                                            title="Saved"
-                                                            // onPress={() => this.props.deleteBook(book)}
-                                                        />
-                                                        :
-                                                    this.props.readBooks.includes(book) ? 
+                                                            this.props.user.isLoggedIn && this.props.books.includes(book) ? 
+                                                                <Button 
+                                                                    icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                                    iconRight
+                                                                    titleStyle={{color: "white"}}
+                                                                    buttonStyle={styles.savedButton} 
+                                                                    title="Saved"
+                                                                    // onPress={() => this.props.deleteBook(book)}
+                                                                />
+                                                                :
+                                                            this.props.readBooks.includes(book) ? 
 
+                                                                <Button 
+                                                                    icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                                    iconRight
+                                                                    buttonStyle={styles.readItButton} 
+                                                                    title="You've read it!"
+                                                                />
+                                                            :
+                                                                <Button 
+                                                                    icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                                    iconRight
+                                                                    buttonStyle={styles.saveButton} 
+                                                                    title="Save"
+                                                                    onPress={() => {
+                                                                        this.props.saveBook(book)
+                                                                    }}
+                                                                />
+                                                        }
                                                         <Button 
-                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
-                                                            iconRight
-                                                            buttonStyle={styles.readItButton} 
-                                                            title="You've read it!"
-                                                        />
-                                                    :
-                                                        <Button 
-                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            icon={<Icon name="info-circle" size={20} color={"white"} style={{marginLeft: 10}} type="font-awesome" />} 
                                                             iconRight
                                                             raised
-                                                            buttonStyle={styles.saveButton} 
-                                                            title="Save"
+                                                            buttonStyle={styles.moreInfoButton} 
+                                                            title="More Info"
                                                             onPress={() => {
-                                                                this.props.saveBook(book)
+                                                                this.getDescription(book.key)
                                                             }}
                                                         />
-                                                }
-                                                <Button 
-                                                    icon={<Icon name="info-circle" size={20} color={"white"} style={{marginLeft: 10}} type="font-awesome" />} 
-                                                    iconRight
-                                                    raised
-                                                    buttonStyle={{width: 200, backgroundColor: "#2392E3"}} 
-                                                    title="More Info"
-                                                    onPress={() => {
-                                                        this.getDescription(book.key)
-                                                    }}
-                                                />
+                                                    </View>
+                                                </View>
                                             </View>
                                             <View>
                                             <Modal 
@@ -277,65 +296,79 @@ class HomeComponent extends Component {
                             {this.state.searchData ? this.state.searchData.map(book => {
                                 return (
                                     <View key={book.key}>
-                                        <Card containerStyle={styles.searchCardContainer}>
-                                            <Image 
-                                                source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
-                                                style={styles.searchCardImage}
-                                                alt={book.title} 
-                                            /> 
-                                            <Text style={styles.searchCardTitle}>{book.title}</Text>
-                                            <Text style={{width: 150, marginTop: 20}}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
-                                            <Text>{book.first_publish_year ? `First published in ${book.first_publish_year}` : null}</Text>
-                                            <View style={{alignItems: "center", marginTop: 10}}>
-                                            {!this.props.user.isLoggedIn ? 
-                                                    <Button 
-                                                        disabled={true}
-                                                        disabledStyle={{backgroundColor: "#858984"}}
-                                                        iconRight
-                                                        buttonStyle={styles.loginToSaveButton} 
-                                                        title="Login in to save"
-                                                    />
+                                        <Card containerStyle={styles.card}>
+                                            <View style={{flexDirection: "row"}}>
+                                                {book.cover_edition_key ? 
+                                                <Image 
+                                                    source={{uri: `https://covers.openlibrary.org/b/OLID/${book.cover_edition_key}.jpg`}}
+                                                    style={styles.searchCardImage}
+                                                    alt={book.title} 
+                                                /> 
+                                                : 
+                                                <Image 
+                                                    source={{uri: `https://cdn.pixabay.com/photo/2020/10/02/17/55/book-5621767_960_720.png`}}
+                                                    style={styles.cardImage}
+                                                    alt={book.title} 
+                                                /> 
+                                                }  
+                                                <View style={{flexDirection: "column", justifyContent: "space-around", marginLeft: 10}}>
+                                                    <View>
+                                                        <Text style={styles.searchCardTitle}>{book.title}</Text>
+                                                        <Text style={styles.authorText}>By {book.author_name ? book.author_name[0] : 'Unknown'}</Text>
+                                                        <Text style={styles.publishedText}>{book.first_publish_year ? `First published in ${book.first_publish_year}` : null}</Text>
+                                                    </View>
+                                                    <View style={{alignItems: "flex-start", marginTop: 10}}>
+                                                    {!this.props.user.isLoggedIn ? 
+                                                            <Button 
+                                                                disabled={true}
+                                                                iconRight
+                                                                buttonStyle={styles.loginToSaveButton} 
+                                                                title="Login in to save"
+                                                            />
 
-                                                    :
+                                                            :
 
-                                                    this.props.user.isLoggedIn && this.props.books.includes(book) ? 
-                                                        <Button 
-                                                            icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
-                                                            iconRight
-                                                            buttonStyle={styles.savedButton} 
-                                                            title="Saved"
-                                                            // onPress={() => this.props.deleteBook(book)}
-                                                        />
-                                                        :
-                                                    this.props.readBooks.includes(book) ? 
+                                                            this.props.user.isLoggedIn && this.props.books.includes(book) ? 
+                                                                <Button 
+                                                                    icon={<Icon name="check" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                                    iconRight
+                                                                    titleStyle={{color: "white"}}
+                                                                    buttonStyle={styles.savedButton} 
+                                                                    title="Saved"
+                                                                    // onPress={() => this.props.deleteBook(book)}
+                                                                />
+                                                                :
+                                                            this.props.readBooks.includes(book) ? 
 
+                                                                <Button 
+                                                                    icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                                    iconRight
+                                                                    buttonStyle={styles.readItButton} 
+                                                                    title="You've read it!"
+                                                                />
+                                                            :
+                                                                <Button 
+                                                                    icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                                    iconRight
+                                                                    buttonStyle={styles.saveButton} 
+                                                                    title="Save"
+                                                                    onPress={() => {
+                                                                        this.props.saveBook(book)
+                                                                    }}
+                                                                />
+                                                        }
                                                         <Button 
-                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
+                                                            icon={<Icon name="info-circle" size={20} color={"white"} style={{marginLeft: 10}} type="font-awesome" />} 
                                                             iconRight
-                                                            buttonStyle={styles.readItButton} 
-                                                            title="You've read it!"
-                                                        />
-                                                    :
-                                                        <Button 
-                                                            icon={<Icon name="book" size={15} style={{marginLeft: 10}} color="white" type="font-awesome" />} 
-                                                            iconRight
-                                                            buttonStyle={styles.saveButton} 
-                                                            title="Save"
+                                                            raised
+                                                            buttonStyle={styles.moreInfoButton} 
+                                                            title="More Info"
                                                             onPress={() => {
-                                                                this.props.saveBook(book)
+                                                                this.getDescription(book.key)
                                                             }}
                                                         />
-                                                }
-                                                <Button 
-                                                    icon={<Icon name="info-circle" size={20} color={"white"} style={{marginLeft: 10}} type="font-awesome" />} 
-                                                    iconRight
-                                                    raised
-                                                    buttonStyle={{width: 200, backgroundColor: "#988CFE"}} 
-                                                    title="More Info"
-                                                    onPress={() => {
-                                                        this.getDescription(book.key)
-                                                    }}
-                                                />
+                                                    </View>
+                                                </View>
                                             </View>
                                             <View>
                                             <Modal 
@@ -401,13 +434,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    text: {
-        fontSize: 20,
-        paddingTop: 10, 
-        flex: 1,
-        flexWrap: "wrap",
-        width: 200
-    },
     image: {
         height: 300,
         width: 200,
@@ -428,12 +454,12 @@ const styles = StyleSheet.create({
         alignSelf: "center", 
         borderRadius: 20, 
         marginTop: 15,
-        backgroundColor: "#2392e3"
+        backgroundColor: "rgba(0,0,0,.75)",
     },
     orText: {
         textAlign: "center", 
         fontSize: 25, 
-        color: "grey", 
+        color: "white", 
         marginTop: 10
     },
     outerContainer: {
@@ -463,18 +489,19 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     loadingText: {
-        color: "#B23963", 
+        color: "white", 
         textAlign: "center"
     },
     card: {
         backgroundColor: "white", 
         borderRadius: 20, 
         shadowColor: 'black',
-        height: 550,
+        marginTop: 30,
         shadowOpacity: 0.26,
         shadowOffset: { width: 0, height: 2},
         shadowRadius: 10,
-        elevation: 3
+        elevation: 3,
+        borderWidth: 0
     },
     cardImage: {
         height: 250,
@@ -488,21 +515,21 @@ const styles = StyleSheet.create({
     cardTitle: {
         width: 200, 
         fontWeight: "bold", 
-        fontSize: 18
+        fontSize: 18,
+        color: "rgba(0,0,0,.9)",
+    },
+    authorText: {
+        width: 150, 
+        marginTop: 20, 
+        color: "rgba(0,0,0,.9)",
+    },
+    publishedText: {
+        color: "rgba(0,0,0,.9)",
     },
     descriptionImage: {
         height:200, 
         width:150, 
         resizeMode: "cover"
-    },
-    searchCardContainer: {
-        backgroundColor: "white", 
-        borderRadius: 20, shadowColor: 'black',
-        height: 550,
-        shadowOpacity: 0.26,
-        shadowOffset: { width: 0, height: 2},
-        shadowRadius: 10,
-        elevation: 3
     },
     searchCardImage: {
         height: 250, 
@@ -516,31 +543,34 @@ const styles = StyleSheet.create({
     searchCardTitle: {
         width: 150, 
         fontWeight: "bold", 
-        fontSize: 18
+        fontSize: 18,
+        color: "rgba(0,0,0,.9)",
     },
     loginToSaveButton: {
         marginBottom: 10,
-        width: 200, 
+        width: 150, 
     },
     savedButton: {
         marginBottom: 10, 
-        width: 200, 
-        backgroundColor: "#CDEFAF",
+        width: 150, 
+        backgroundColor: "green",
     },
     readItButton: {
         marginBottom: 10, 
-        width: 200, 
-        backgroundColor: "orange", 
+        width: 150, 
+        backgroundColor: "#5739DF", 
         color: "black"
     },
     saveButton: {
         marginBottom: 10, 
-        width: 200, 
+        width: 150, 
         backgroundColor: "#D1427D", 
         color: "black"
+    },
+    moreInfoButton: {
+        width: 150, 
+        backgroundColor: "#3998DF"
     }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent)
-
-// export default HomeComponent
