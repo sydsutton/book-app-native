@@ -9,7 +9,6 @@ import GENRES from "../booksData/GENRES"
 import { connect } from "react-redux"
 import { saveBook } from "../redux/ActionCreators"
 import { deleteBook } from "../redux/ActionCreators"
-import LinearGradient from 'react-native-linear-gradient'
 
 const mapStateToProps = state => {
     return {
@@ -166,7 +165,6 @@ class HomeComponent extends Component {
                                 </View> : null}
                         <ScrollView horizontal style={{height: 600}}>
                             {this.state.searchedBooks ? this.state.searchedBooks.map(book => {
-                                console.log(book)
                                 return (
                                     <View key={book.key}>
                                         <Card containerStyle={styles.card}>
@@ -186,7 +184,9 @@ class HomeComponent extends Component {
                                                 }
                                                 <View style={{flexDirection: "column", justifyContent: "space-around", marginLeft: 10}}>
                                                     <View>
-                                                        <Text style={styles.cardTitle}>{book.title}</Text>
+                                                        <View style={{flexDirection: "row"}}>
+                                                            <Text style={styles.cardTitle}>{book.title}</Text>
+                                                        </View>
                                                         <Text style={styles.authorText}>By {book.authors[0] ? book.authors[0].name : 'Unknown'}</Text>
                                                     </View>
                                                     <View style={{alignItems: "flex-start", marginTop: 10}}>
@@ -489,11 +489,12 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     loadingText: {
-        color: "white", 
+        color: "rgba(0,0,0,.9)", 
         textAlign: "center"
     },
     card: {
         backgroundColor: "white", 
+        maxWidth: "95%",
         borderRadius: 20, 
         shadowColor: 'black',
         marginTop: 30,
@@ -501,7 +502,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2},
         shadowRadius: 10,
         elevation: 3,
-        borderWidth: 0
+        borderWidth: 0,
+        maxWidth: 375
     },
     cardImage: {
         height: 250,
@@ -513,15 +515,14 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     cardTitle: {
-        width: 200, 
         fontWeight: "bold", 
         fontSize: 18,
         color: "rgba(0,0,0,.9)",
+        flex: 1
     },
     authorText: {
-        width: 150, 
         marginTop: 20, 
-        color: "rgba(0,0,0,.9)",
+        color: "rgba(0,0,0,.9)"
     },
     publishedText: {
         color: "rgba(0,0,0,.9)",
@@ -541,7 +542,7 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     searchCardTitle: {
-        width: 150, 
+        width: 200, 
         fontWeight: "bold", 
         fontSize: 18,
         color: "rgba(0,0,0,.9)",
