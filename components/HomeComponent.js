@@ -69,7 +69,6 @@ class HomeComponent extends Component {
         } else {
             alert("Sorry, something went wrong")
         }
-        // this.state.selectedBookType && !this.state.searchData ? this.toggleSubjectModal() : this.toggleTitleModal()  
     }
 
     updateSearch = (search) => {
@@ -251,8 +250,8 @@ class HomeComponent extends Component {
                                                 visible={this.state.isSubjectOpen} 
                                             >
                                                 <ScrollView style={{alignSelf: "center", padding: 20}}>
-                                                    <View style={{marginLeft: "auto"}}>
-                                                        <Icon type="font-awesome" name="times" onPress={this.toggleSubjectModal}
+                                                    <View style={{marginLeft: "auto", margin: 20}}>
+                                                        <Icon type="font-awesome" name="times" color={"grey"} onPress={this.toggleSubjectModal}
                                                             title="close" 
                                                         />
                                                     </View>
@@ -277,18 +276,20 @@ class HomeComponent extends Component {
                                                     {!this.state.bookDescription.description ? 
                                                         <Text style={{alignSelf: "center"}}>Sorry, but there is no description for this book</Text> 
                                                     : null}
-                                                    {this.state.bookDescription.subjectPlaces ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
-                                                    {this.state.bookDescription.subjectPlaces ? this.state.bookDescription.subjectPlaces.map(place => {
-                                                        return (
-                                                            <Text key={place}>{place}</Text>
-                                                        )
-                                                    }) : null}
-                                                    {this.state.bookDescription.places ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
-                                                    {this.state.bookDescription.places ? this.state.bookDescription.places.map(place => {
-                                                        return (
-                                                            <Text key={place}>{place}</Text>
-                                                        )
-                                                    }) : null}
+                                                    <View style={{marginBottom: 30}}>
+                                                        {this.state.bookDescription.subjectPlaces ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
+                                                        {this.state.bookDescription.subjectPlaces ? this.state.bookDescription.subjectPlaces.map(place => {
+                                                            return (
+                                                                <Text key={place}>{place}</Text>
+                                                            )
+                                                        }) : null}
+                                                        {this.state.bookDescription.places ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
+                                                        {this.state.bookDescription.places ? this.state.bookDescription.places.map(place => {
+                                                            return (
+                                                                <Text key={place}>{place}</Text>
+                                                            )
+                                                        }) : null}
+                                                    </View>
                                                 </ScrollView>
                                             </Modal>
                                             </View>
@@ -391,8 +392,8 @@ class HomeComponent extends Component {
                                                 visible={this.state.isTitleOpen} 
                                             >
                                                 <ScrollView style={{alignSelf: "center", padding: 20}}>
-                                                    <View style={{marginLeft: "auto"}}>
-                                                        <Icon type="font-awesome" name="times" onPress={this.toggleTitleModal}
+                                                    <View style={{marginLeft: "auto", margin: 20}}>
+                                                        <Icon type="font-awesome" name="times" color={"grey"} onPress={this.toggleTitleModal}
                                                             title="close" 
                                                         />
                                                     </View>
@@ -409,20 +410,22 @@ class HomeComponent extends Component {
                                                         <Text h4 style={{textDecorationLine: "underline"}}>{this.state.bookDescription.title ? this.state.bookDescription.title : null}</Text>
                                                     </View>
                                                     {this.state.bookDescription.description && !this.state.bookDescription.description.value ? 
-                                                        <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description}</Text> 
+                                                        <Text style={{alignSelf: "center", marginBottom: 50}}>{this.state.bookDescription.description}</Text> 
                                                     : null}
                                                     {this.state.bookDescription.description && this.state.bookDescription.description.value ? 
-                                                        <Text style={{alignSelf: "center"}}>{this.state.bookDescription.description.value}</Text> 
+                                                        <Text style={{alignSelf: "center", marginBottom: 50}}>{this.state.bookDescription.description.value}</Text> 
                                                     : null}
                                                     {!this.state.bookDescription.description ? 
                                                         <Text style={{alignSelf: "center"}}>Sorry, but there is no description for this book</Text> 
                                                     : null}
-                                                    {this.state.bookDescription.subjectPlaces ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
-                                                    {this.state.bookDescription.subjectPlaces ? this.state.bookDescription.subjectPlaces.map(place => {
-                                                        return (
-                                                            <Text key={place}>{place}</Text>
-                                                        )
-                                                    }) : null}
+                                                    <View style={{marginBottom: 30}}>
+                                                        {this.state.bookDescription.subjectPlaces ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
+                                                        {this.state.bookDescription.subjectPlaces ? this.state.bookDescription.subjectPlaces.map(place => {
+                                                            return (
+                                                                <Text key={place}>{place}</Text>
+                                                            )
+                                                        }) : null}
+                                                    </View>
                                                     {this.state.bookDescription.places ? <Text style={{marginTop: 15, fontWeight: "bold"}}>Subject Places: </Text> : null}
                                                     {this.state.bookDescription.places ? this.state.bookDescription.places.map(place => {
                                                         return (

@@ -43,16 +43,18 @@ class ProfileComponent extends Component {
     }
 
     pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-
-        if (!result.cancelled) {
-            this.setState({image: result.uri})
-          }
+        const getImage = async () => {
+            let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            })
+                if (!result.cancelled) {
+                    await this.setState({image: result.uri})
+                }
+            }
+            getImage()
         }
 
     handlePassword = () => {
@@ -84,7 +86,7 @@ class ProfileComponent extends Component {
                                 buttonStyle={{marginLeft: 300, marginTop: 50, borderRadius: 8}}
                                 title=""
                                 type="clear"
-                                icon={<Icon name="sign-out" type="font-awesome" color="#699ec9"  />} 
+                                icon={<Icon name="sign-out" type="font-awesome" color="white"  />} 
                             />
                             <Card containerStyle={styles.card}>
                                 <View style={styles.imageContainer}>
@@ -98,7 +100,10 @@ class ProfileComponent extends Component {
                                     /> 
                                     }
                                 </View>
-                                <Button onPress={() => this.pickImage()} title="+" buttonStyle={styles.addImage}/>
+                                <Button 
+                                    onPress={() => this.pickImage()} 
+                                    title="+" buttonStyle={styles.addImage} 
+                                />
                                 <View style={styles.nameContainer}>
                                     <Text h4 style={styles.firstName}>{this.props.userInfo.profile.firstName}</Text>
                                     <Text h4 style={styles.lastName}>{this.props.userInfo.profile.lastName}</Text>
@@ -128,7 +133,7 @@ class ProfileComponent extends Component {
                                                             :
                                                                 <Text>By Unknown</Text>
                                                             }
-                                                            <Button containerStyle={{marginTop: 10}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
+                                                            <Button containerStyle={{marginTop: 10}} buttonStyle={{backgroundColor: "#D1427D"}} onPress={() => this.props.deleteReadBook(item)} title="Remove" />
                                                         </View>
                                                     }
                                                     backgroundColor={"white"}
@@ -215,6 +220,7 @@ const styles = StyleSheet.create({
     firstName: {
         fontWeight: "bold", 
         alignSelf: "center", 
+        marginTop: 20
     },
     lastName: {
         fontWeight: "bold", 
@@ -232,7 +238,8 @@ const styles = StyleSheet.create({
     },
     password: {
         fontSize: 15, 
-        marginRight: 20
+        marginRight: 20,
+        flex: 1
     },
     text: {
         fontWeight: "bold", 
