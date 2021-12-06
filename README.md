@@ -1,6 +1,6 @@
 # _YourShelf Portfolio Project_
 
-
+![Overview Image](../main/myFolder/overviewImage.jpg)
 
 #### By _**Andrew Sutton**_
 
